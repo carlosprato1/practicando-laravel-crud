@@ -5,7 +5,7 @@
 
   <ul>
   	@forelse($projects as $projectsItem)
-  	  <li>   {{$projectsItem->title}}<span>-</span>
+  	  <li>   {{$projectsItem->title}}<span>-MODIFICADO1</span>
         <small>{{$projectsItem->description}}
 
   	    {{$projectsItem->updated_at->format('h:i:s')}}</small>
