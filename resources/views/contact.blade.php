@@ -11,11 +11,11 @@
 <ul>
 @foreach($errors -> all() as $error)
   <li>{{$error}}</li>
-@endforeach  
+@endforeach
 </ul>
 --}}
 
-<form method="POST" action="{{route('contactformulario')}}">
+<form method="POST" action="{{route('messege.store')}}">
 @csrf
 	<input name="name" placeholder="ingrese su nombre" value="{{old('name')}}">
 	<br>
@@ -23,7 +23,7 @@
 	<input type="text" name="email" placeholder="ingrese su email" value="{{old('email')}}">
 	<br>
 	{!!$errors->first('email','<small>:message</small><br>')!!}
-	
+
 	<input name="subject" placeholder="ingrese su asunto" value="{{old('subject')}}">
 	<br>
 	<input type="text" name="mensaje" placeholder="escriba su mensaje" value="{{old('mensaje')}}"></input>

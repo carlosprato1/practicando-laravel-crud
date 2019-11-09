@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Project;  //uso de la vista
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+//use Illuminate\Support\Facades\DB;
 
-class portafolioController extends Controller
+class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class portafolioController extends Controller
     public function index()
     {
        $projects = Project::orderBy('created_at','DESC')->get();
-       //$projects =  DB::table("users")->get(); //probando
-    return view('portafolio',compact('projects'));
+
+    return view('projects.index',compact('projects'));
     }
 
 
@@ -28,7 +28,7 @@ class portafolioController extends Controller
      */
     public function create()
     {
-        //
+        return view('projects.create');
     }
 
     /**
@@ -39,7 +39,14 @@ class portafolioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+      Project:: create([
+         'title' => $request->get('title') ,
+         'url' => $request->get('url'),
+         'description' => $request->get('description') ,
+      ]);
+
+     return redirect()->route('projects.index');
     }
 
     /**
@@ -50,7 +57,8 @@ class portafolioController extends Controller
      */
     public function show($id)
     {
-        //
+        $project = Project::findOrfail($id);
+        return view('projects.show',['project' => $project]);
     }
 
     /**

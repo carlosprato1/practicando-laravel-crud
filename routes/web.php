@@ -19,11 +19,12 @@
 //Pasos para agregar archivo php con helpers:
 //agregar en composer.json dentro de autoload:
  //"files":["app/helpers.php"]
- 
+
 
 Route::view('/','home')->name('home');
-Route::view('/about','about')->name('about');
-Route::view('/contact','contact')->name('contact');
-Route::resource('/portafolio','portafolioController')->only(['index']); //nombre predetermiado portafolio.index.
+Route::view('/quienes-somos','about')->name('about');
+Route::view('/contacto','contact')->name('contact');
 
-Route::post('contact', 'MessageController@store')->name('contactformulario');
+Route::resource('/projects','ProjectController')->only(['index','show','create','store']); //nombre predetermiado portafolio.index.
+
+Route::post('contact', 'MessageController@store')->name('messege.store');

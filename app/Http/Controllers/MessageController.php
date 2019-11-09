@@ -12,6 +12,6 @@ class MessageController extends Controller
     		'name' => 'required',  //no null
     		'email' => 'required|email'
     		]);
-    	return "formulario procesado";
+    	return "formulario procesado Pero no guardado en la BD aun";
     }
 }
