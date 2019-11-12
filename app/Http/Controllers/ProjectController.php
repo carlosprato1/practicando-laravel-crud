@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Project;  //uso de la vista
 use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\DB;
+use App\Http\Requests\saveProjectRequesst;
 
 class ProjectController extends Controller
 {
@@ -37,14 +38,10 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(saveProjectRequesst $request)
     {
 
-      Project:: create([
-         'title' => $request->get('title') ,
-         'url' => $request->get('url'),
-         'description' => $request->get('description') ,
-      ]);
+        Project:: create( $request->validated() );
 
      return redirect()->route('projects.index');
     }
@@ -69,7 +66,8 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        //
+        $project = Project::findOrfail($id);
+        return view('projects.edit',['project' => $project]);
     }
 
     /**
@@ -79,9 +77,11 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Project $project, saveProjectRequesst $request)
     {
-        //     bfbfbgi
+
+        $project->update(  $request->validated() );
+        return redirect()->route('projects.show',['project' => $project]);
     }
 
     /**
@@ -90,8 +90,10 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Project $project)
     {
-        //
+      // Project::destroy::($id)    //por id
+      $project->delete();
+      return redirect()->route('projects.index');
     }
 }

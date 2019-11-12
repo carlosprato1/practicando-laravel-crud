@@ -15,9 +15,8 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    protected $guarded = []; // Evita error 401, pero los atributos de la tabla que se definen dentro del sistema y no por el susario (asisgacion mafiba) quedaran desprotegidos
+                            // por esto no debemos usar en en el controller request()->all().  se usara las validaciones. para el create().
 
     /**
      * The attributes that should be hidden for arrays.

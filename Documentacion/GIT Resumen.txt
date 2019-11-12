@@ -1,7 +1,7 @@
 ///////////////GIT- GITHUB /////////////////////////////////////////////////
 //    Requisito: Git Bash                                                 //
 //    DOCUMENTACION: git --help                                           //
-//    DOCUMENTACION2: https://git-scm.com/book/en/v1                      //                   //
+//    DOCUMENTACION2: https://git-scm.com/book/en/v1                      //
 ////////////////////////////////////////////////////////////////////////////
 
 //////////////////////COMENZAR/////////////////////////////////////////////
@@ -22,7 +22,7 @@
         verde - archivo   agregado al area de preparacion.
 
  - mostrar meta datos de los commited.
-   $ git log
+  $ git log
   $ git log -g // mostrar commit de todos los branch con toda la informacion.
   $ git log --oneline --decorate --all --graph // enlistar todos los commit y branch
 

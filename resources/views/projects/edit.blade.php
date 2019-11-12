@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title','Crear Proyecto')
+@section('title','Editar Proyecto')
 @section('content')
 
   <h1>Crear Nuevo Proyecto</h1>
@@ -14,27 +14,28 @@
 @endif
 
 
-<form method="POST" action="{{route('projects.store')}}">
+<form method="POST" action="{{route('projects.update',$project)}}">
   @csrf
+  @method('PUT')
   <label>
     Titulo del Proyecto <br>
-    <input type="text" name="title"  value="{{old('title')}}">
+    <input type="text" name="title"  value="{{ old('title',$project->title)}}">
     	{!!$errors->first('title','<small>:message</small><br>')!!}
   </label>
   <br>
   <label>
    URL del proyecto <br>
-   <input type="text" name="url"  value="{{old('url')}}">
+   <input type="text" name="url"  value="{{old('url',$project->url)}}">
    	{!!$errors->first('url','<small>:message</small><br>')!!}
   </label>
   <br>
  <label>
    Descripcion del proyecto <br>
-   <textarea name='description'  value="{{old('description')}}"></textarea>
+   <textarea name='description'>{{old('description',$project->description)}}</textarea>
    {!!$errors->first('description','<small>:message</small><br>')!!}
 </label>
 <br>
-<button>Guardar</button>
+<button>Actualizar</button>
 </form>
 
 @endsection
