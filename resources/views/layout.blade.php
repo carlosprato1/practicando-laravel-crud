@@ -13,16 +13,10 @@
 
 </head>
 <body>
- <nav>
 
- 	<ul>
- 		<li class="{{ setActive('home') }}"><a href="{{Route('home')}}">Home</a></li>
-		<li class="{{setActive('projects.*') }}"><a href="{{Route('projects.index')}}">Proyectos</a></li>
-		<li class="{{ setActive('contact')}}"><a href="{{Route('contact')}}">Contact</a></li>
-		<li class="{{setActive('about')}}"><a href="{{Route('about')}}">About</a></li>
- 	</ul>
- </nav>
- @yield('content')
+  @include('partials.nav')
+  @include('partials.sesion-status')
+  @yield('content')
 
 </body>
 </html>

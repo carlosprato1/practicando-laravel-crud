@@ -9,6 +9,11 @@ use App\Http\Requests\saveProjectRequesst;
 
 class ProjectController extends Controller
 {
+    public function __construct()
+    {
+      $this->middleware('auth')->except('index','show'); // los usuarios no identificados solo podran listar y seleccionar los proyectos.
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,7 +34,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('projects.create');
+        return view('projects.create',['project' => new Project]);  // se pasa un  proyecto vacio solo para normalizar form con edit
     }
 
     /**
@@ -43,7 +48,7 @@ class ProjectController extends Controller
 
         Project:: create( $request->validated() );
 
-     return redirect()->route('projects.index');
+     return redirect()->route('projects.index')->with('MensajeStatus', 'Proyeto Almacenado');
     }
 
     /**
@@ -81,7 +86,7 @@ class ProjectController extends Controller
     {
 
         $project->update(  $request->validated() );
-        return redirect()->route('projects.show',['project' => $project]);
+        return redirect()->route('projects.show',['project' => $project])->with('MensajeStatus', 'Proyeto Actualizado');;
     }
 
     /**
@@ -94,6 +99,6 @@ class ProjectController extends Controller
     {
       // Project::destroy::($id)    //por id
       $project->delete();
-      return redirect()->route('projects.index');
+      return redirect()->route('projects.index')->with('MensajeStatus', 'Proyeto Eliminado');;
     }
 }

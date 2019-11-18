@@ -1,10 +1,12 @@
 @extends('layout')
-@section('title','Proyecto')
+@section('title','Proyectos')
 @section('content')
 
+<h1>Listado de Proyectos</h1>
+@auth
+   <a href="{{route('projects.create')}}">Crear Proyecto</a>
+@endauth
 
-  <h1>Proyetos</h1>
-  <a href="{{route('projects.create')}}">Crear Proyecto</a>
   <ul>
   	@forelse($projects as $projectsItem)
   	  <li>  <a href="{{route('projects.show',$projectsItem)}}"> {{$projectsItem->title}} </a>

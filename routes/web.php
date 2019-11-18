@@ -18,13 +18,15 @@
 
 //Pasos para agregar archivo php con helpers:
 //agregar en composer.json dentro de autoload:
- //"files":["app/helpers.php"]
+//"files":["app/helpers.php"]
 
 
 Route::view('/','home')->name('home');
 Route::view('/quienes-somos','about')->name('about');
 Route::view('/contacto','contact')->name('contact');
 
-Route::resource('/projects','ProjectController')->only(['index','show','create','store','edit','update','destroy']); //nombre predetermiado portafolio.index.
+Route::resource('/projects','ProjectController'); //nombre predetermiado portafolio.index.
 
 Route::post('contact', 'MessageController@store')->name('messege.store');
+
+Auth::routes(['register'=>false]); ///GET,POST /login. POST /logout, GET,POST /register.''

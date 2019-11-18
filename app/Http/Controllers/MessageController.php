@@ -12,6 +12,11 @@ class MessageController extends Controller
     		'name' => 'required',  //no null
     		'email' => 'required|email'
     		]);
-    	return "formulario procesado Pero no guardado en la BD aun";
+
+        //AQUI APREDIBLE ENVIA UN CORREO ELECTRONICO CON EL MENSAJE
+
+    //	return "formulario enviado por correo electronico "; problemas con el refrescar pagina. pide reenviar peticion.
+    return back()->with('MensajeStatus','Recibimos tu correo Electronico, te responderemos en la brevedad posible.'); //Guarda mensaje con la llave mensageStatus en la session del usuario.
     }
+
 }

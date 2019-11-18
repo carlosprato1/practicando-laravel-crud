@@ -212,6 +212,8 @@
     +            Route::resource('nombreDelRecurso','nombreController')->only([create,edit])        +
     +        - Invocar todas Exepto las nombradas (Ej. index,show)                                  +
     +	         Route::resource('nombreDelRecurso','nombreController')->except([index,show])         +
+    +        - Invocarlas Todas:                                                                    +
+    +          Route::resource('nombreDelRecurso','nombreController');                              +
     +                                                                                               +
     +     - Tambien se puede invocar un metodo a la ves. respetando los Metodos REST?               +
     +          Route::get('/subpagina','nameController@index')->name('clave-name');                 +
@@ -380,7 +382,7 @@ Documentacion: https://laravel.com/docs/5.8/queries
 
 libreria:  use Illuminate\Support\Facades\DB;
 DB::table("NombreTabla")->get();
-//////////////////////////////////ELOQUEN - ORM/////////////////////////////////////////////////////////////
+////////////////////////////////////ELOQUEN/////////////////////////////////////////////////////////////
 Documentacion: https://laravel.com/docs/5.8/eloquent
 ORM (objeto mapeo relacional) Datos de BD <->  clase/objeto
 
@@ -417,7 +419,7 @@ ORM (objeto mapeo relacional) Datos de BD <->  clase/objeto
        Store() - guardar datos:  (Ver Primero: formulario y validaciones)
 
           OPCION 1:    En modelo users Definir:
-                 protected $guarded = []; // evita error 401, los datos quedan desprotegidos de la asignacin masiva.
+                 protected $guarded = []; // evita error 401, los datos quedan desprotegidos de la asignacion masiva por usuario.
                                           // nunca usar request()->all(); se tendran que validar todos los datos para poedr guardarlos.
            2. Guardar con create.
                   $fields = request()->validate([...]);
@@ -449,9 +451,104 @@ ORM (objeto mapeo relacional) Datos de BD <->  clase/objeto
     3.  @csrf @method('DELETE');
     4. $project->delete();
 
+/////////////////////////////SESIONES///////////////////////////////////////////////////////////////////////////////////
+almacenamiento temporal de usuario actual
+configurar app/config/sesion.php
+  drive: tipo de archivo donde se almacenaran estos datos:
+     file - funciona bien, un archivo por cada navegador abierto
+     directorio del file: app/storage/framework/sessions
 
-CONTINUAR EN:
+
+////////////////////////MENSAJES FLASH o SESION////////////////////////////////////////////////////////////////////
+Documentacion: https://laravel.com/docs/6.x/responses#redirecting-with-flashed-session-data
+
+// Es una forma sencilla de mostrar mensajes de notificacion (flash, que desaparecen) despues de alguna peticion del usuario.
+// el mensaje se guarda en la sesion, cuando redireccionamos a una view podemos mostrar el mensaje.
+// Ventajas de uso: al refrescar no pide repetir accion y borra el mensaje, no es obligatiorio usar pagina nueva.
+                    se procesa el mensaje con blade.
+// Notificacion para los REST: store,update y destroy.
+
+1. redireccionar a la view donde queremos mostrar el mensaje.
+      return back()->with('keyStatus','Mensaje');
+      return redirect()->with('keyStatus','Mensaje');
+2. con with('key','mensaje') //guarda el mensaje en session en el key.
+3. con las directivas de blade procesamos el mensaje.
+          @if (session('MensajeStatus')) //hay mensaje?
+             {{session('MensajeStatus')}} // mostrar mensajes
+4. se puede mostrar el mnesaje en el layout.
+
+///////////////////////////AUTENTICACION:-LOGIN-Y-REGISTRO-DE-USUARIO//////////////////////////////////////////////////////
+Documentacion: https://laravel.com/docs/5.7/authentication
+comando make:auth en laravel6 https://www.youtube.com/watch?v=cjIMSNQ27Mg
+rofundizar en autenticacion de usuarios: https://aprendible.com/series/autenticacion
+
+* implementar COMANDO: >php artisan make:auth  // automatiza el login,registro y Reestablecimiento de contraseñas.
+
+1.  Estructura:
+  - agrega el comando en auth:routes(); en routes/web.php, este contiene las routas mencionadas.
+  - agrega los controladores en controllers/Auth/
+
+  - Login, cierre de sesion:
+     controller:
+        LoginController
+     routes:
+       GET  /login    // para mostrar el formulario de LOGIN
+       POST /login    // donde se envia el formulario del login
+       POST /logout   // para cerrar sesiones
+     view:
+       /views/auth/login.blade.php
+       /views/layouts/app.blade.php
+
+  - formulario de registro:
+     controller:
+        RegisterController
+     Routes:
+        GET  /register // para mostrar el formulario de REGISTRO
+        POST  /register // donde se envia el formulario de REGISTRO
+     View:
+        /views/auth/register.blade.php
+        /views/layouts/app.blade.php
+
+2. Redireccionamiento:
+     - Acceso solo con login (/home)
+     - Acceso publico, root, raiz (/)
+
+     - Se elimina la ruta /home y el controlador HomeController Agregados por el make:Auth.
+     - por defecto, luego de registrar se loguea al usuario automaticamente y  redirecciona a (/home). se CAMBIA a (/) en RegisterController.php.
+     - tambien cambiar a (/) luego del login en LoginController.
+           (Esto es porque en este caso no abra (/home) y raiz (/) sera la misma home.
+     - tambie por defecto, si ya se esta autentificado el login y el registro redirecciona a /home cambiar a /. CAMBIAR en Controller/Middleware/RedirectIfAuthenticated .
+
+     - para manejar sesiones en UI en blade se manejan los comandos:
+        {{auth()->user-name }} // acceder a datos de usuario autentificado (@auth evitar error.)
+        @auth                  // ejecutar comandos si, se esta autentificado.
+        @guess                 // ejecutar comandos si, NO se esta autentificado.
+        @else                  // el contrario
+
+     - Cerrar session:  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+     - deshabilitar registro o login  ej. auth::routes(['register' => false]);
+
+///////////////////////////PROTEJER LAS RUTAS//////////////////////////////////////////////////////////////////////////////////
+Documentacion: https://laravel.com/docs/5.7/authentication#protecting-routes
+
+Se usan los Middleware: identifica el tipo de peticion http (Ej. autenticacion) y se establece su comportamiento (Ej. redireccionamiento)
+
+en espedifico se usan:  //los nombres de todos los middleware  estan en http/kernel.php
+  http/Middleware/authenticate.php         name 'auth'    // comportamiento de peticiones para usuarios NO autentificados
+  http/Middleware/RedirectIfAuthenticated  name 'guess'   // comportamiento de peticiones para usuarios SI autentificados
+
+Se le pueden aplicar middleware (filtros) a las routes para permitir solo usuarios autentificados.
+ OPCION 1:
+   ->middleware('auth');  // asigna a todos los routes.
+
+ OPCION 2: se se desea asignar por metodo REST.
+   en el controlador en el __construct(), agregar:
+        $this->middleware('auth');  //todos igual opcion 1
+        $this->middleware('auth')->only('create',...);
+        $this->middleware('auth')->exept('create'...);
+
 ///////////////////////////EXTRAS///////////////////////////////////////////////////////////////////////
+CONTINUAR EN: 33 - implementar login y registro
 Video 19 - Cómo enviar emails: 100 emials GRATIS al dia con sendgrid como usarlo en laravel.
 video 30 - Reutilizar HTML parecidos - Caso: reutilizar Formularios CREATE y EDIT
 Videos bloqueados - Curso de autenticacion - password encriptado, Reestablecimiento de contraseñas, recordar datos por token.
