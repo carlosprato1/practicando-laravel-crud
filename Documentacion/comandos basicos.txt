@@ -19,8 +19,11 @@
   Migraciones.
   Formularios - Validaciones.
   Querys.
-  Eloquen
-  Extras
+  Eloquen.
+  Sesiones.
+  Mensajes flash o de sesion.
+  Autenticacion: login, registro, logout.
+  Extras.
 
 ///////////////////////////////// NOTAS BASICAS //////////////////////////////////////////////////
 
@@ -452,6 +455,7 @@ ORM (objeto mapeo relacional) Datos de BD <->  clase/objeto
     4. $project->delete();
 
 /////////////////////////////SESIONES///////////////////////////////////////////////////////////////////////////////////
+Documentacion: https://laravel.com/docs/5.7/session
 almacenamiento temporal de usuario actual
 configurar app/config/sesion.php
   drive: tipo de archivo donde se almacenaran estos datos:
@@ -466,7 +470,7 @@ Documentacion: https://laravel.com/docs/6.x/responses#redirecting-with-flashed-s
 // el mensaje se guarda en la sesion, cuando redireccionamos a una view podemos mostrar el mensaje.
 // Ventajas de uso: al refrescar no pide repetir accion y borra el mensaje, no es obligatiorio usar pagina nueva.
                     se procesa el mensaje con blade.
-// Notificacion para los REST: store,update y destroy.
+// Notificaciones para los REST: store,update y destroy.
 
 1. redireccionar a la view donde queremos mostrar el mensaje.
       return back()->with('keyStatus','Mensaje');
@@ -514,7 +518,7 @@ rofundizar en autenticacion de usuarios: https://aprendible.com/series/autentica
      - Acceso publico, root, raiz (/)
 
      - Se elimina la ruta /home y el controlador HomeController Agregados por el make:Auth.
-     - por defecto, luego de registrar se loguea al usuario automaticamente y  redirecciona a (/home). se CAMBIA a (/) en RegisterController.php.
+     - por defecto, luego de registrar se loguea al usuario automaticamente y redirecciona a (/home). se CAMBIA a (/) en RegisterController.php.
      - tambien cambiar a (/) luego del login en LoginController.
            (Esto es porque en este caso no abra (/home) y raiz (/) sera la misma home.
      - tambie por defecto, si ya se esta autentificado el login y el registro redirecciona a /home cambiar a /. CAMBIAR en Controller/Middleware/RedirectIfAuthenticated .
@@ -529,6 +533,7 @@ rofundizar en autenticacion de usuarios: https://aprendible.com/series/autentica
      - deshabilitar registro o login  ej. auth::routes(['register' => false]);
 
 ///////////////////////////PROTEJER LAS RUTAS//////////////////////////////////////////////////////////////////////////////////
+Documentacion: https://laravel.com/docs/5.7/middleware
 Documentacion: https://laravel.com/docs/5.7/authentication#protecting-routes
 
 Se usan los Middleware: identifica el tipo de peticion http (Ej. autenticacion) y se establece su comportamiento (Ej. redireccionamiento)

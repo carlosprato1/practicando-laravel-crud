@@ -1,5 +1,5 @@
-#  APRENDIBLE - GUIA DE LARAVEL DESDE CERO
-Practicando CRUB con LARAVEL. Notas Personales.
+#  APRENDIBLE -  LARAVEL DESDE CERO
+Notas Personales.
 
 ## Requerimientos:
 
@@ -7,7 +7,21 @@ Practicando CRUB con LARAVEL. Notas Personales.
  - Laravel 5.7.25
  - DOCUMENTACION OFICIAL DE LARAVEL: https://laravel.com/docs/5.7
 
-# NOTAS BASICAS
+## Indice
+ 1. Basico.
+ 2. Routes.
+ 3.  Views con blade.
+ 4.  Controladores.
+ 5. Formularios - Validaciones.
+ 6.  Migraciones.
+ 7.  Querys.
+ 8.   Eloquen
+ 9.   Sesiones
+ 10. Mensajes flash o de sesion.
+ 11. Autenticacion: login, registro, logout.
+ 12. Extras.
+
+# 1. BASICO
 
 * LARAGON
    *  Crear nueva aplicación en laragon/www marcar: `>laravel new [nombre]`
@@ -25,41 +39,40 @@ Practicando CRUB con LARAVEL. Notas Personales.
        -  GIT lo ignora, por lo que hay que crear otro .env para el local y otro para el servidor.
        -   **APP_ENV:** local (local)/ production (servidor-nube)  / testing (otra pc cualquiera)
 
-# ROUTES
-* Documentacion en: https://laravel.com/docs/5.8/routing
+# 2. ROUTES
+* Documentacion: https://laravel.com/docs/5.8/routing
 
-* definen las rutas URL de las peticiones (GET,POST) y se asocian con un controlador para procesar la petición o con una view directamente.
- *  cada route se le asigna un nombre, en el codigo se usara este nombre para apuntar a su url `route('nombre-clave')`
+* definen las rutas URL de las peticiones (GET,POST) y se asocian con un controlador  o con una view directamente.
+ *  cada route se le asigna un nombre, en el codigo se usara este nombre para apuntar a su URL`route('nombre-clave')`
 
 ## Opciones para responder vistas o datos directamente (Sin controllers)
 
-* Responder solo texto:                                                                 
+*  **Responder solo texto:**                                                                 
   `Route::get('ruta1',function{
  return "responder este Texto";})>name('nombre-clave');`
 
- * Responder View:
+ * **Responder View:**
  `Route::view('/about','about')->name('about')`
 
- * Captar datos por la url y responder un View. **Ej. localhost/subpagina/valor**	         
-      `Route::get('/ruta/{variable?}', function ($variable = 'valor_predeterminado') {`     
-      `return view('nombre_view',['variable' -> $variable]);				                     
-      })->name('nombre-clave');		`					                                             
+ * **Captar datos por la url y responder un View**. Ej. localhost/subpagina/valor	         
+ *     Route::get('/ruta/{variable?}', function ($variable ='valor_predeterminado') {
+        return view('nombre_view',['variable' -> $variable]);				                     
+       })->name('nombre-clave');				                                             
 
- * Responder View pasandole una constante:					                                     
+ * **Responder View pasandole una constante:**					                                     
  `Route::view('/ruta','subpagina',['variable' => 'CONSTANTE'])->name('nombre-clave');`
 
- * Responder View pasandole un array:						                                       
-      ` <?php										                                                           
+ * **Responder View pasandole un array:**						                                       
+ -      <?php										                                                           
          $array = [									                                                     
             ['title'=>'valor1'], 							                                           
             ['title'=>'valor2'],						                                          	   
-         ];	`		                                                                         
+         ];
+         Route::view('/ruta','subpagina',compact('array'))->name('nombre-clave');
 
-    `Route::view('/ruta','subpagina',compact('array'))->name('nombre-clave');`
+## 3. VIEW CON BLADE
 
-## VIEW CON BLADE
-
- * Documentacion de blade en: https://laravel.com/docs/5.8/blade#template-inheritance
+ * Documentacion: https://laravel.com/docs/5.8/blade#template-inheritance
  * Directorio: **'resources/views/vista.blade.php'**
 
  * datos no escapados:
@@ -69,49 +82,43 @@ Practicando CRUB con LARAVEL. Notas Personales.
  * Comentarios:
 `{{-- Comentarios --}}`
 
- * Directivas de blade:
-       `@json($array)` decodificar un json
+ * **Algunas Directivas de control:**
 
-     - Directivas de control:
-          `@if(), @elseif(), @else, @endif`
-          `@isset(), @endisset, @empty(), @endempty`
-          `@switch(), @case(), @break, @default,  @endswitch`
-          `@for () @endfor`
-         ` @foreach ($users as $user) @endforeach  @forelse ($users as $user)  @empty  @endforelse`
-          `@while (true)  @endwhile`
-         `@continue or @break`
+         `@if(), @elseif(), @else, @endif`
+         `@isset(), @endisset, @empty(), @endempty`
+         `@switch(), @case(), @break, @default,  @endswitch`
+         `@for () @endfor  @json($array)`
 
-  * Traducción de Texto `@lang(palabras traducida segun locate de laravel)`
+  * **Traducción de Texto** `@lang(palabras traducida segun locate de laravel)`
     los busca en la directiva: app/resource/lang/en.json
 
-  * Ejemplo de **sections** and **layouts**:
-    * **layout, plantilla padre**
-`<html> `
- `<head>`
-`<title>App Name - @yield('title')</title>`
-`</head>`
-`<body>`
-`@section('sidebar')`
-`This is the master sidebar. `
-`@show`
-`<div class="container"> `
-`@yield('content') `
-`</div>`
-`</body>`
-`</html>`
+  * **Ejemplo de LAYOUT, planilla padre:**
+    *         layout, plantilla padre
+          <html>
+           <head>
+            <title>App Name - @yield('title')</title>`
+           </head>
+           <body>
+            @section('sidebar')
+                       This is the master sidebar.
+            @show
+            <div class="container">
+               @yield('content')
+            </div>
+           </body>
+          </html>
+* **Ejemplo section Hijo.**
+*     @extends('layouts.app')                          
+      @section('title', 'Page Title')                     		                                           
+      @section('sidebar')                
+     	  @parent                      
+            <p>This is appended to the master sidebar.</p>
+      @endsection                                                                   
+      @section('content')
+          <p>This is my body content.</p>
+      @endsection
 
-    * **Extender el layout, hijo**
-`@extends('layouts.app')     `                                                                           
-      `@section('title', 'Page Title')                     		                                           
-      @section('sidebar')    `                             
-     	 ` @parent      `                                    
-        `<p>This is appended to the master sidebar.</p>`   
-     ` @endsection `                                                                                         
-     ` @section('content') `                                
-        ` <p>This is my body content.</p>`                  
-      `@endsection `
-
-# CONTROLADORES
+# 4.  CONTROLADORES
 
 * Documentacion: https://laravel.com/docs/5.7/controllers
  * Directorio: **app/http/Controlers/**
@@ -123,7 +130,7 @@ Practicando CRUB con LARAVEL. Notas Personales.
      ` php artisan route:list`
 
 ## Controller con invoke
- Contiene un unico metodo **_invoke** y se ejecuta automaticamente al ser invocado.
+ Contiene un unico metodo **`_invoke`** y se ejecuta automaticamente al ser invocado.
  * crear controlador `_invoke`:
 `php artisan make:controller nombreController -i`
  * Route:								                                                                     
@@ -155,11 +162,11 @@ Practicando CRUB con LARAVEL. Notas Personales.
 
       `Route::post('view', 'MessageController@store')->name('nombre-post');`    
 
-      `Route::put();    probar`                                                        
-      `Route::patch();  probar`                                                        
-      `Route::delete(); probar`
+      `Route::put();    `                                                        
+      `Route::patch();  `                                                        
+      `Route::delete(); `
 
-# Controller con APIs
+## Controller con APIs
 Para manejar las API (interfaces) del sistema.
         Puede contener los metodos REST Exepto CREATE y EDIT.                                      
 
@@ -172,9 +179,9 @@ Para manejar las API (interfaces) del sistema.
        - Invocar todas Exepto las nombradas (Ej. index,show)                                       
     	   Route::apiResource('nombreDelRecurso','nombreController')->->except([index,show])          
 
-       - Tambien se puede invocar un metodo a la ves. respetando los Metodos REST?
+       - Tambien se puede invocar un metodo a la ves. respetando los Metodos REST.
 
-##  FORMULARIOS - VALIDACIONES CON BLADE
+##  5. FORMULARIOS - VALIDACIONES CON BLADE
 
 Documentacion: https://laravel.com/docs/5.8/validation#introduction
 * Formularios - Validaciones:
@@ -198,7 +205,7 @@ Documentacion: https://laravel.com/docs/5.8/validation#introduction
         - Para Guardar en la BD, MODELO:
            - Ver: ORM - Eloquent, CRUB - Store.
 
-## MIGRACIONES
+## 6. MIGRACIONES
 
 
 Docmentacion: https://laravel.com/docs/5.8/migrations#introduction
@@ -281,12 +288,10 @@ Docmentacion: https://laravel.com/docs/5.8/migrations#introduction
           `>php artisan migrate:reset`       -> Ejecuta los metodos DOWN de todas las migraciones.
           `>php artisan migrate:fresh`       -> Ejecuta RESET and MIGRATE.   (aplica cambios hechos en los UP() pero se destruyen todos los datos!)
 
-## Querys
+## 7. Querys
 Documentacion: https://laravel.com/docs/5.8/queries
 
-
-
-## ELOQUEN - ORM
+## 8. ELOQUEN
 Documentacion: https://laravel.com/docs/5.8/eloquent
 
 ORM (objeto mapeo relacional) Datos de BD <->  clase/objeto
@@ -301,7 +306,7 @@ ORM (objeto mapeo relacional) Datos de BD <->  clase/objeto
          `protected $keyType = 'string';`      // indicar que el primary_key es un String
          `public $timestamps = false;`         // indicar que no se usa created_at y updated_at
 
-   3. Importar clase-modelo dentro del controlador: 
+   3. Importar clase-modelo dentro del controlador:
    `use App/NombreModelo;`
 
    4. Implementar **CRUB** con REST en el controlador:
@@ -327,7 +332,83 @@ ORM (objeto mapeo relacional) Datos de BD <->  clase/objeto
                  `protected $fillable = ['atributo1','atributo2'...];`
 
            2. Guardar con create.
-                  `Project:: create([
-                      'title' => $request->get('title'),
-                      'description' => $request->get('description'),
-                   ]);`
+           *     Project:: create([
+                     'title' => $request->get('title'),
+                  'description' => $request->get('description'),
+                 ]);
+## 9. SESIONES
+- Documentacion: https://laravel.com/docs/5.7/session
+- Configuraciones:  app/config/sesion.php
+-  drive: tipo de archivo donde se almacenaran estos datos:
+ -  directorio archivo de sesiones: app/storage/framework/sessions
+
+## 10. MENSAJES FLASH O DE SESION
+
+- **Documentacion:** https://laravel.com/docs/6.x/responses#redirecting-with-flashed-session-data
+
+- Es una forma sencilla de mostrar mensajes de notificacion (flash, que desaparecen) despues de alguna peticion del usuario.
+- el mensaje se guarda en la sesion, cuando redireccionamos a una view podemos mostrar el mensaje.
+-  **Ventajas de uso:** al refrescar no pide repetir acción y borra el mensaje, no es obligatorio usar pagina nueva y se procesa el mensaje con blade.
+- Notificaciones para los REST: store,update y destroy.
+- **Pasos**:
+1. redireccionar a la view donde queremos mostrar el mensaje.
+ `return back()->with('keyStatus','Mensaje');`
+  `return redirect()->with('keyStatus','Mensaje');`
+2. con `with('key','mensaje')` guarda el mensaje en session en el key.
+3. con las directivas de blade procesamos el mensaje.
+         ` @if (session('MensajeStatus'))` - hay mensaje?
+            ` {{session('MensajeStatus')}}` -  mostrar mensajes
+4. se puede mostrar el menesaje en el layout.
+
+## 11. AUTENTICACION: LOGIN, REGISTRO y LOGOUT.
+
+- Documentacion: https://laravel.com/docs/5.7/authentication
+- comando make:auth en laravel6 https://www.youtube.com/watch?v=cjIMSNQ27Mg
+- profundizar en autenticacion de usuarios: https://aprendible.com/series/autenticacion
+
+- **Pasos:**
+1.  **implementar COMANDO**: `>php artisan make:auth`   automatiza el login,registro y Reestablecimiento de contraseñas.
+
+2.  **Ofrece la siguiente Estructura:**
+    - agrega el comando en `auth:routes();` en **routes/web.php**, este contiene las routas mencionadas a continuarion.
+    - agrega los controladores en:  **controllers/Auth/**
+
+  -      Login, cierre de sesion:
+         controller:
+            LoginController
+         routes:
+            GET  /login    // para mostrar el formulario de LOGIN
+            POST /login    // donde se envia el formulario del login
+            POST /logout   // para cerrar sesiones
+         view:
+             /views/auth/login.blade.php
+             /views/layouts/app.blade.php
+
+  -      formulario de registro:
+          controller:
+               RegisterController
+          Routes:
+              GET  /register // para mostrar el formulario de REGISTRO
+              POST  /register // donde se envia el formulario de REGISTRO
+          View:
+              /views/auth/register.blade.php
+             /views/layouts/app.blade.php
+
+3.  **Configurar Re-direccionamiento:**
+     `/home` : Acceso solo a usuarios autentificados "luego de login"
+     `/`:  raiz, acceso publico.
+     Para este ejemplo, no utilizaremos ninguna ruta `/home`, por lo tanto, se mostrara solo la ruta raiz `/` para usuarios invitados como autentificados.
+
+     - Se elimina la ruta `/home` y el controlador `HomeController` Agregados por el `make:Auth`
+     - Por defecto, luego de registrar al usuario se "inicia sesion" al usuario automáticamente y re-direcciona a `/home`. Se cambiara el re-direccionamiento a  `/` en `RegisterController.php`
+     - Por defecto, se re-direcciona a `/home` luego de hacer  "login" se cambia a la ruta `/` en `LoginController`.
+     - Por defecto, a los usuarios autentificados las rutas `/register` y `/login` re-direccionan a `/home` cambiar a `/` en: `Controller/Middleware/RedirectIfAuthenticated` .
+
+     - para manejar sesiones en UI con **blade** se manejan los comandos:
+     -     `{{auth()->user-name }}` // acceder a datos de usuario autentificado `@auth` evitar error.
+        `@auth`                  // ejecuta comandos si, se esta autentificado.
+        `@guess`                 // ejecuta comandos si, NO se esta autentificado.
+       `@else `                // el contrario
+
+     - Cerrar session: ` <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">`
+     - deshabilitar registro o login  ej.` auth::routes(['register' => false]);`
