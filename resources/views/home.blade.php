@@ -5,8 +5,9 @@
   <h1>HOME</h1>
 
 @auth
-  
+
   {{auth()->user()}}
+
 
 @endauth
 

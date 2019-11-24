@@ -309,7 +309,7 @@ ORM (objeto mapeo relacional) Datos de BD <->  clase/objeto
    3. Importar clase-modelo dentro del controlador:
    `use App/NombreModelo;`
 
-   4. Implementar **CRUB** con REST en el controlador:
+   4. Implementar **CRUB** con REST en el controlador: ACTUALIZAR con .TXT
 
        * **Index()  - Listar recursos:**
           `$tabla = NombreModelo::all(); ` // me trae todas las filas y columnas de la tabla.

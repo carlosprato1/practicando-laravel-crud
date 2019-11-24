@@ -7,25 +7,31 @@
 +              - administrador de la BD HeidiSQL                                                 +
 +              - laravel actual 5.7.25                                                           +
 +                                                                                                +
-+    DOCUMENTACION OFICIAL DE LARAVEL: https://laravel.com/docs/5.7                              +
++ DOCUMENTACION OFICIAL DE LARAVEL: https://laravel.com/docs/5.7 ; https://laravel.com/api/5.7/  +
 +                                                                                                +
 +------------------------------------------------------------------------------------------------+
 
 /////////////////////////////////INDICE/////////////////////////////////////////////////////////////
+  Nivel principiante
+BACK-END:
   Notas Basicas.
   Routes.
   Views con blade.
   Controladores.
   Migraciones.
   Formularios - Validaciones.
-  Querys.
   Eloquen.
   Sesiones.
   Mensajes flash o de sesion.
   Autenticacion: login, registro, logout.
   Extras.
+FRONT-END:
 
-///////////////////////////////// NOTAS BASICAS //////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+*                                 ***********************                                            *
+*                                 *   B A C K - E N D   *                                            *
+*                                 ***********************                                            *
+///////////////////////////////// NOTAS //////////////////////////////////////////////////////////////
 
    LARAGON,ARTISAN,COMPOSER:
    *  Crear nueva aplicacion: desde laragon/www marcar: >laravel new [nombre]
@@ -43,7 +49,14 @@
        -  GIT lo ignora. por lo que hay que crear otro .env para el local y otro para el servidor.
        -  APP_ENV:    local / production (servidor-nube)  / testing (otra pc cualquiera)
 
-
+   *  Personalizar paginas de Errores de Peticion HTTP.
+       Documentacion: https://laravel.com/docs/6.x/errors#custom-http-error-pages
+       - crear una views en: resources/views/errors/N°_DEL_ERROR.php.BLADE y automaticamente
+         tomara esta pagina cuando lance el error nombrado.
+         los errores HTTP mas comunes:
+           404 - pagina no encontada.
+           401 - desautorizado.
+           503 - Service Unavailable
    PHP:
     *  Operador ternario
          $boolean?accionTrue:accionFalse
@@ -322,13 +335,29 @@ https://laravel.com/docs/5.8/migrations#introduction
      $table->dropForeign('NOMBRETABLA_ID_foreign');        //eliminar clave foranea
 
 4.  Manejo/ejecucion de las migraciones:
-          >php artisan migrate             -> Ejecuta los metodos UP de todas las migraciones.
-          >php artisan migrate:rollback    -> Ejecuta los metodos DOWN de las ultimas migraciones ejecutadas. (retrocede un paso)
+          >php artisan migrate                  -> Ejecuta los metodos UP de todas las migraciones.
+          >php artisan migrate:rollback         -> Ejecuta los metodos DOWN de las ultimas migraciones ejecutadas. (retrocede un paso)
           >php artisan migrate:rollback --step=2 -> retroceder 2 pasos
-          >php artisan migrate:reset       -> Ejecuta los metodos DOWN de todas las migraciones.
-          >php artisan migrate:fresh       -> Ejecuta RESET and MIGRATE.   (aplica cambios hechos en los UP() pero se destruyen todos los datos!)
+          >php artisan migrate:reset            -> Ejecuta los metodos DOWN de todas las migraciones.
+          >php artisan migrate:fresh --seed     -> Ejecuta RESET and MIGRATE.   (aplica cambios hechos en los UP() pero se destruyen todos los datos!)
 
+/////////////////////////////SEEDERS/////////////////////////////////////////////////////////////////////////////////////////////////
 
+ creaar: php artisan make:seeder userSeeder  ; opcion2: php artisan db:seed --class=UsersTableSeeder auto registra la clase?
+ registrar en: database/seeds/DatabaseSeeder.php.  Agregar: this->call(NombreSeeder::class);
+
+llenar manualmente:   DB::table('users')->insert([
+                         'name' => Str::random(10),
+                         'email' => Str::random(10).'@gmail.com',
+                         'password' => bcrypt('secret'),
+                      ]);
+
+- llamar seeder en cascada: $this->call([ UsersTableSeeder::class, ]);
+- llenar automaticamete ver: model factory y faker.
+
+Run DatabaseSeeder:
+Run seeder:              php artisan db:seed
+migrate and run seeders: php artisan migrate:refresh --seed
 ////////////////////////// FORMULARIOS - VALIDACIONES CON BLADE /////////////////////////////////////////
 Documentacion: https://laravel.com/docs/5.8/validation#available-validation-rules
 
@@ -379,12 +408,6 @@ Documentacion: https://laravel.com/docs/5.8/validation#available-validation-rule
         - Para Guardar en la BD, MODELO:
            - Ver: ORM - Eloquent, CRUB - Store.
 
-
-///////////////////////////////////Querys/////////////////////////////////////////////////////////////////////
-Documentacion: https://laravel.com/docs/5.8/queries
-
-libreria:  use Illuminate\Support\Facades\DB;
-DB::table("NombreTabla")->get();
 ////////////////////////////////////ELOQUEN/////////////////////////////////////////////////////////////
 Documentacion: https://laravel.com/docs/5.8/eloquent
 ORM (objeto mapeo relacional) Datos de BD <->  clase/objeto
@@ -507,7 +530,7 @@ rofundizar en autenticacion de usuarios: https://aprendible.com/series/autentica
      controller:
         RegisterController
      Routes:
-        GET  /register // para mostrar el formulario de REGISTRO
+        GET   /register // para mostrar el formulario de REGISTRO
         POST  /register // donde se envia el formulario de REGISTRO
      View:
         /views/auth/register.blade.php
@@ -552,11 +575,54 @@ Se le pueden aplicar middleware (filtros) a las routes para permitir solo usuari
         $this->middleware('auth')->only('create',...);
         $this->middleware('auth')->exept('create'...);
 
+
+///////////////////////////MIDDLEWARE - FILTRAR USUARIOS SOLO RUTAS Y RECURSOS/////////////////////////////////////////////////////////////
+Documentacion: https://laravel.com/docs/5.7/middleware
+Filtrar otros Recursos:  cuerpo del mensaje encryptado, no se puede. implode( ", ", $request->all())
+                         solo se puede obtener el id del resurso por la url().
+
+- agregar campo edad en el registro en RegisterController y en la view.
+- Crear Middleware >php make:middleware NombreMiddleware.
+- Agregar Alias y ruta en: Kernel.php Variable $routeMiddleware
+- en el middleware: Para leer valores del usuario: $request->user()->edad, usar condiciones y return.
+- @if ({{auth()->user()}}) Se puede filtrar los usuarios en la view.
+
+//////////////AUTORIZACIONES - PERMISOS Y ROLES DE USUARIOS: RUTAS Y VIEW///////////////////////////////////////////////////////////////////////
+Documentacion: https://laravel.com/docs/5.7/authorization; video: https://www.youtube.com/watch?v=E11JQYiF-7g
+
+- En: App\Providers\AuthServiceProvider Se escribe la Restrincion.
+
+Gate::define('NombreDeRestrincion', function ($user, $id) {
+        //Aqui se Define:    // FUNCION CALLBACK ESCRIBIRLA EN UNA SOlA LINEA SI NO ME SALE ERROR
+        // $user: Usuario Actual.
+        // $post: Recurso comprometido
+        return $user->id == $id;  // ¿el id del recurso es igual al id del usuario? si es False call denies en caso contraerio call allow
+        return intval($user->role) == 1;      // ¿usuario actual Es empleado? Al Definir 1. Empleado, 2. supervisor, 3. administrador.
+    });
+
+en el controlador:
+if (Gate::allows('NombreDeRestrincion', $id)) { ...} // o denies redirect()-with();
+
+Para blade usar directivas:  @cannot ('NombreDeRestrincion',$id)  @else  o  @can ('NombreDeRestrincion',$id)
+
 ///////////////////////////EXTRAS///////////////////////////////////////////////////////////////////////
-CONTINUAR EN: 33 - implementar login y registro
-Video 19 - Cómo enviar emails: 100 emials GRATIS al dia con sendgrid como usarlo en laravel.
-video 30 - Reutilizar HTML parecidos - Caso: reutilizar Formularios CREATE y EDIT
-Videos bloqueados - Curso de autenticacion - password encriptado, Reestablecimiento de contraseñas, recordar datos por token.
-/////////////////////////////////REQUEST()////////////////////////////////////////////////////////
-Documentacion: https://laravel.com/docs/5.7/requests
-  recupera informacion de inputs, urls, sesiones (usuarios, privilegios), cookies, datos de las peticiones.
+- Video 19 - Cómo enviar emails: 100 emials GRATIS al dia con sendgrid en laravel.
+- video 30 - Reutilizar HTML parecidos - Caso: reutilizar Formularios CREATE y EDIT
+- Manejar Datos de las Peticiones: urls, users, cookies.
+   Documentacion: https://laravel.com/docs/5.7/requests
+- Manejo de peticiones, reglas buqueda en la BD: Documentacion: https://laravel.com/docs/5.8/queries
+- Reseteo de contraseñas por Email: https://aprendible.com/series/autenticacion/lecciones/personalizando-el-email-de-reseteo-de-contrasena
+- Documentacion Nivel principiante: https://ajgallego.gitbooks.io/laravel-5/content/index.html
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+  *                                 ***********************                                            *
+  *                                 *  F R O N T - E N D  *                                            *
+  *                                 ***********************                                            *
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  LARAVEL MIX Documentacion: https://laravel.com/docs/5.7/mix

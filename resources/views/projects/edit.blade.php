@@ -6,6 +6,7 @@
 
 @include('partials.list-errors-val')
 
+
   <form method="POST" action="{{route('projects.update',$project)}}">
      @method('PUT')
      @include('projects._form-create-edit',['btnTxt' => 'Actualizar'])

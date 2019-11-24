@@ -6,12 +6,14 @@ use App\Project;  //uso de la vista
 use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\DB;
 use App\Http\Requests\saveProjectRequesst;
+use Illuminate\Support\Facades\Gate;
 
 class ProjectController extends Controller
 {
     public function __construct()
     {
       $this->middleware('auth')->except('index','show'); // los usuarios no identificados solo podran listar y seleccionar los proyectos.
+      $this->middleware('edad')->only('destroy'); //solo los mayores de edad pueden Eliminar
     }
 
     /**
@@ -59,6 +61,11 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
+
+        if (Gate::denies('solo-admin-show-project-3', $id)) {
+              return redirect()->route('projects.index')->with('MensajeStatus', 'Solo admin pueden ver el 3re proyecto');
+       }
+
         $project = Project::findOrfail($id);
         return view('projects.show',['project' => $project]);
     }
@@ -71,6 +78,12 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
+
+      if (Gate::denies('isAdmin', $id)) {
+            return redirect()->route('projects.index')->with('MensajeStatus', 'Solo admin pueden editar');
+     }
+
+
         $project = Project::findOrfail($id);
         return view('projects.edit',['project' => $project]);
     }

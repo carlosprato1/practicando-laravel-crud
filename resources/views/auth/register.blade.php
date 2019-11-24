@@ -26,6 +26,20 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="edad" class="col-md-4 col-form-label text-md-right">{{ __('Edad') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="edad" type="number" class="form-control{{ $errors->has('edad') ? ' is-invalid' : '' }}" name="edad" value="{{ old('edad') }}" required autofocus>
+
+                                @if ($errors->has('edad'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('edad') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
