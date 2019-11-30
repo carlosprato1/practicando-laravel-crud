@@ -66,8 +66,9 @@ class ProjectController extends Controller
               return redirect()->route('projects.index')->with('MensajeStatus', 'Solo admin pueden ver el 3re proyecto');
        }
 
-        $project = Project::findOrfail($id);
-        return view('projects.show',['project' => $project]);
+       $project = Project::findOrfail($id);
+       return view('projects.show',['project' => $project]);
+
     }
 
     /**
@@ -79,9 +80,9 @@ class ProjectController extends Controller
     public function edit($id)
     {
 
-      if (Gate::denies('isAdmin', $id)) {
+    /*  if (Gate::denies('isAdmin', $id)) { // ej. no se prohibio en la view
             return redirect()->route('projects.index')->with('MensajeStatus', 'Solo admin pueden editar');
-     }
+     } */
 
 
         $project = Project::findOrfail($id);

@@ -576,7 +576,7 @@ Se le pueden aplicar middleware (filtros) a las routes para permitir solo usuari
         $this->middleware('auth')->exept('create'...);
 
 
-///////////////////////////MIDDLEWARE - FILTRAR USUARIOS SOLO RUTAS Y RECURSOS/////////////////////////////////////////////////////////////
+///////////////////////////MIDDLEWARE - CASO: Filtrar rutas/////////////////////////////////////////////////////////////
 Documentacion: https://laravel.com/docs/5.7/middleware
 Filtrar otros Recursos:  cuerpo del mensaje encryptado, no se puede. implode( ", ", $request->all())
                          solo se puede obtener el id del resurso por la url().
@@ -587,24 +587,38 @@ Filtrar otros Recursos:  cuerpo del mensaje encryptado, no se puede. implode( ",
 - en el middleware: Para leer valores del usuario: $request->user()->edad, usar condiciones y return.
 - @if ({{auth()->user()}}) Se puede filtrar los usuarios en la view.
 
-//////////////AUTORIZACIONES - PERMISOS Y ROLES DE USUARIOS: RUTAS Y VIEW///////////////////////////////////////////////////////////////////////
+//////////////AUTORIZACIONES - PERMISOS Y ROLES DE USUARIOS Basico///////////////////////////////////////////////////////////////////////
 Documentacion: https://laravel.com/docs/5.7/authorization; video: https://www.youtube.com/watch?v=E11JQYiF-7g
+(puedo traer cualquier valor de usuario pero no de recursos, se complica solo por GET?)
 
-- En: App\Providers\AuthServiceProvider Se escribe la Restrincion.
+- En: App\Providers\AuthServiceProvider Se escribe la Restrincion:
 
-Gate::define('NombreDeRestrincion', function ($user, $id) {
-        //Aqui se Define:    // FUNCION CALLBACK ESCRIBIRLA EN UNA SOlA LINEA SI NO ME SALE ERROR
-        // $user: Usuario Actual.
-        // $post: Recurso comprometido
-        return $user->id == $id;  // ¿el id del recurso es igual al id del usuario? si es False call denies en caso contraerio call allow
-        return intval($user->role) == 1;      // ¿usuario actual Es empleado? Al Definir 1. Empleado, 2. supervisor, 3. administrador.
-    });
+   Gate::define('NombreDeRestrincion', function ($user, $id) {
+           return $user->id == $id;           // ¿el id del recurso es igual al id del usuario? si es False call denies en caso contraerio call allow
+           return intval($user->role) == 1;   // ¿usuario actual Es empleado? Al Definir en la tabla usario rol: 1. Empleado, 2. supervisor, 3. administrador.
+  });
 
-en el controlador:
-if (Gate::allows('NombreDeRestrincion', $id)) { ...} // o denies redirect()-with();
+- en controlador se define el GATE.  solo puedo pasar variables del GET?  ni si quiera puedo obtener datos de la BD y luego pasarlo
+if (Gate::allows('NombreDeRestrincion', $id)) { ...} // o denies redirect()->with();
 
 Para blade usar directivas:  @cannot ('NombreDeRestrincion',$id)  @else  o  @can ('NombreDeRestrincion',$id)
 
+///////////////////////////  ROLES Y PERMISOS COMPLETO CON CHiNOBi /////////////////////////////////////////////
+
+
+
+
+COMPLETAR CON: 1 - Bienvenido al curso de Roles y Permisos en LARAVEL | Rimorsoft Online
+
+
+
+//////////////////////////ACTUALIZAR LARAVEL - 5.7 a 5.8////////////////////////////////////////////////////////////////////////////////
+DOCUMENTACION: https://styde.net/como-actualizar-de-laravel-5-7-a-5-8/
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////EXTRAS///////////////////////////////////////////////////////////////////////
 - Video 19 - Cómo enviar emails: 100 emials GRATIS al dia con sendgrid en laravel.
 - video 30 - Reutilizar HTML parecidos - Caso: reutilizar Formularios CREATE y EDIT
@@ -613,6 +627,9 @@ Para blade usar directivas:  @cannot ('NombreDeRestrincion',$id)  @else  o  @can
 - Manejo de peticiones, reglas buqueda en la BD: Documentacion: https://laravel.com/docs/5.8/queries
 - Reseteo de contraseñas por Email: https://aprendible.com/series/autenticacion/lecciones/personalizando-el-email-de-reseteo-de-contrasena
 - Documentacion Nivel principiante: https://ajgallego.gitbooks.io/laravel-5/content/index.html
+- Servidores Conclusiones:
+    no hay servidor gratuito para subir laravel y un buen broker MQTT. solo tarjeta de credito y por 1año. (google,aws,azure, heroku,)
+    opciones un cpu o rasperry. (android NO!). si es con maquina propia. hay que configurar la red y la pc.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

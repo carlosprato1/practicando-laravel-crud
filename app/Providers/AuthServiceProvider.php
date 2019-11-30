@@ -25,16 +25,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-         Gate::define('isAdmin',function ($user,$project){return $user->role == "3";});
-         Gate::define('isEmpleado',function ($user){return $user->role == "1";});
+       // Ej. cancelado. no hay prohibision en view.
+      //   Gate::define('isAdmin',function ($user,$project){return $user->role == "3";});  // Solo admin pueden editar
 
-         Gate::define('solo-admin-show-project-3',function ($user,$projectId){
-            if ( $user->role != "3") {
-              if ( $projectId == "3") {
+         Gate::define('solo-admin-show-project-3',function ($user,$projectId){   //si le paso Project no agarra el view. solo agarra del get
+            if ( $user->role != "3" && $projectId == "3") {
                   return false; // call denies redireccionar
-              }
             }
-                 return true;
+               return true;
          });
     }
 }
