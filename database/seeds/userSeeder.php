@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 
 use Illuminate\Support\Facades\DB;
+use Caffeinated\Shinobi\Models\Role;
+
 
 class userSeeder extends Seeder
 {
@@ -13,7 +15,18 @@ class userSeeder extends Seeder
      */
     public function run()
     {
-      // manualmente individualmente
+
+      factory(App\User::class,10)->create();
+
+      //Debe haber un ROL ADMIN POR DEFECTO.
+      //Crear ROL con Acceso completo  PAra empezar.
+       Role::create([
+         'name' => 'Admin',
+         'slug' => 'admin',
+         'special' => 'all-access',
+       ]);
+
+      // manualmente
       DB::table('users')->insert([
            'name' => 'carlos prato',
            'email' => 'carlos@gmail.com',
@@ -22,15 +35,6 @@ class userSeeder extends Seeder
            'role' => '3',
            'created_at' => '2019-11-23 18:00:07',
        ]);
-
-       DB::table('users')->insert([
-            'name' => 'rodolfo',
-            'email' => 'rodolfo@gmail.com',
-            'password' => bcrypt('123456'),
-            'edad' => '35',
-            'role' => '2',
-            'created_at' => '2019-11-24 18:00:07',
-        ]);
 
         DB::table('users')->insert([
              'name' => 'maria',
@@ -41,14 +45,6 @@ class userSeeder extends Seeder
              'created_at' => '2019-11-25 18:00:07',
          ]);
 
-         DB::table('users')->insert([
-              'name' => 'pedro',
-              'email' => 'pedro@gmail.com',
-              'password' => bcrypt('123456'),
-              'edad' => '30',
-              'role' => '1',
-              'created_at' => '2019-11-26 18:00:07',
-          ]);
 
     }
 }

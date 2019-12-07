@@ -36,18 +36,33 @@ FRONT-END:
    LARAGON,ARTISAN,COMPOSER:
    *  Crear nueva aplicacion: desde laragon/www marcar: >laravel new [nombre]
    *  Acceder: http://nombre.test
+   *  Generar modelo, controlador -r, factory y migracion:  >php artisan make:model RECURSO -a [no incluye el seeder: "php artisan make:seeder nombreSeeder"]
    *  php artisan se ejecuta dentro de la carpeta de la app.
    *  generar informacion de todos los comandos de artisan: >php artisan list
    *  ver rutas y controladores: >php artisan route:list
    *  Agregar Archivos php a laravel.
        1. composer.json -> autoload -> Agregar el archivo: "files":["NombreProyecto/nombreArchivo.php"]
        2. resetear el autoload, laragon: #composer dumpautoload.
+   * luego de aplicar un cambio en config hacerlo tambien en .ENV!: > php artisan config:clear
 
    LARAVEL:
     *  variables de entorno en .env:
+       - Las configuraciones se cambian aqui para que surja Efecto,
        -  guardar config BD, urls, API keys, claves.
        -  GIT lo ignora. por lo que hay que crear otro .env para el local y otro para el servidor.
        -  APP_ENV:    local / production (servidor-nube)  / testing (otra pc cualquiera)
+
+  ATOM hotkeys : https://github.com/nwinkler/atom-keyboard-shortcuts
+      - ctrl+r; ctrl+t; ctrl+f:  busqueda archivo, declaracion, parabra
+      - ctrl+d, ctrl+u; ctrl+a; ctrl+l: seleccionar iguales, todo, lineas abajo.
+      - ctrl+x; eliminar linea
+      - ctrl+n; ctrl-w  nuevo archivo, cerrar tab
+      - ctrl+z; ctrl+y ir atras, adelante
+      - ctrl-space: mostrar lista auto-completar
+      - ctrl+shift+{ o } : mover codigo derecha o izquierda
+      - ctrl-shift-d: duplicar linea actual.
+      - ctrl + up o down: mover linea
+      - ctrl + shift + p: command palette
 
    *  Personalizar paginas de Errores de Peticion HTTP.
        Documentacion: https://laravel.com/docs/6.x/errors#custom-http-error-pages
@@ -341,19 +356,26 @@ https://laravel.com/docs/5.8/migrations#introduction
           >php artisan migrate:reset            -> Ejecuta los metodos DOWN de todas las migraciones.
           >php artisan migrate:fresh --seed     -> Ejecuta RESET and MIGRATE.   (aplica cambios hechos en los UP() pero se destruyen todos los datos!)
 
-/////////////////////////////SEEDERS/////////////////////////////////////////////////////////////////////////////////////////////////
-
- creaar: php artisan make:seeder userSeeder  ; opcion2: php artisan db:seed --class=UsersTableSeeder auto registra la clase?
+/////////////////////////////SEEDERS Y FACTORY/////////////////////////////////////////////////////////////////////////////////////////////////
+DOCUMENTACION: https://laravel.com/docs/master/seeding
+ crear:  php artisan make:seeder TableSeeder   (no se relaciona con una tabla aqui)
  registrar en: database/seeds/DatabaseSeeder.php.  Agregar: this->call(NombreSeeder::class);
 
-llenar manualmente:   DB::table('users')->insert([
+* LLENAR MANUALMENTE:
+                      use Illuminate\Support\Facades\DB;
+
+                      DB::table('users')->insert([
                          'name' => Str::random(10),
                          'email' => Str::random(10).'@gmail.com',
                          'password' => bcrypt('secret'),
                       ]);
 
-- llamar seeder en cascada: $this->call([ UsersTableSeeder::class, ]);
-- llenar automaticamete ver: model factory y faker.
+ *  FACTORY: LLENAR AUTOMATICAMENTE.
+ DOCUMENTACION: https://laravel.com/docs/6.x/database-testing#writing-factories
+ LISTADO DE FAKERS: https://github.com/fzaninotto/Faker
+
+  Crear: > php artisan make:factory recursoFactory --model recursoModel
+  Agregar al Seeder:   factory(App\recursoModel::class, 10)->create();
 
 Run DatabaseSeeder:
 Run seeder:              php artisan db:seed
@@ -555,7 +577,7 @@ rofundizar en autenticacion de usuarios: https://aprendible.com/series/autentica
      - Cerrar session:  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
      - deshabilitar registro o login  ej. auth::routes(['register' => false]);
 
-///////////////////////////PROTEJER LAS RUTAS//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////MIDDLEWARE - CASO: FILTRAR AUTENTENTICACION//////////////////////////////////////////////////////////////////////////////////
 Documentacion: https://laravel.com/docs/5.7/middleware
 Documentacion: https://laravel.com/docs/5.7/authentication#protecting-routes
 
@@ -587,38 +609,112 @@ Filtrar otros Recursos:  cuerpo del mensaje encryptado, no se puede. implode( ",
 - en el middleware: Para leer valores del usuario: $request->user()->edad, usar condiciones y return.
 - @if ({{auth()->user()}}) Se puede filtrar los usuarios en la view.
 
-//////////////AUTORIZACIONES - PERMISOS Y ROLES DE USUARIOS Basico///////////////////////////////////////////////////////////////////////
+//////////////////////AUTORIZACIONES - PERMISOS Y ROLES DE USUARIOS BASICO///////////////////////////////////////////////////////////////////////
 Documentacion: https://laravel.com/docs/5.7/authorization; video: https://www.youtube.com/watch?v=E11JQYiF-7g
+Nota Defini en la tabla usario un rol con: 1. Empleado, 2. supervisor, 3. administrador.
 (puedo traer cualquier valor de usuario pero no de recursos, se complica solo por GET?)
 
 - En: App\Providers\AuthServiceProvider Se escribe la Restrincion:
 
    Gate::define('NombreDeRestrincion', function ($user, $id) {
            return $user->id == $id;           // ¿el id del recurso es igual al id del usuario? si es False call denies en caso contraerio call allow
-           return intval($user->role) == 1;   // ¿usuario actual Es empleado? Al Definir en la tabla usario rol: 1. Empleado, 2. supervisor, 3. administrador.
+           return intval($user->role) == 1;   // ¿usuario actual Es empleado?
   });
 
 - en controlador se define el GATE.  solo puedo pasar variables del GET?  ni si quiera puedo obtener datos de la BD y luego pasarlo
 if (Gate::allows('NombreDeRestrincion', $id)) { ...} // o denies redirect()->with();
 
 Para blade usar directivas:  @cannot ('NombreDeRestrincion',$id)  @else  o  @can ('NombreDeRestrincion',$id)
+ Ejemplo: Solo admin puede ver proyecto 3.
+                --     Gate::define('solo-admin-show-project-3',function ($user,$projectId){
+                            if ( $user->role != "3" && $projectId == "3") {return false;} else {return true;}
+                       });
+
+                --    @can(restrin..) @else @guest @if(id==3) @endif @else @endguest @encan
+
+
 
 ///////////////////////////  ROLES Y PERMISOS COMPLETO CON CHiNOBi /////////////////////////////////////////////
+ - DOCUMENTACION guia: https://www.youtube.com/watch?v=gHvecXNv3S4&list=PLhCiuvlix-rSgQNLIl7Qg2KbQni3fz-ea&index=2 || Bienvenido al curso de Roles y Permisos en LARAVEL | Rimorsoft Online
+ - paquete github: https://github.com/caffeinated/shinobi
+ - Documentacion Shinobi: https://caffeinatedpackages.com/guide/packages/shinobi.html#usage
+
+- actualizar laravel.
+- instalar paquete shinobi:   composer require caffeinated/shinobi
+- en .env cambiar cache_driver: "array" y refrescar configuracion "config: clear".
+- Info, ver migraciones de CHINOBi, en directorio:  vendor/caffeinated/shinobi/migrations.
+- Ejecutar migraciones: php artisan migrate
+- instalar sistema de autenticacion php artisan make:auth
+- Crear modelo, factory, migracion, controller -r. [no incluye seeder] >php artisan make:model Proyecto -a
+        Nota: modelo de role esta en shinobi y modelo de user esta creado por defecto.
+        Nota: verificar Rutas con php artisan route:list. si no crearlas.
+        Nota: Crear controller -r: userController y roleController
+- crear seeders recursoSeeder y userSeeder.    >php artisan make:seeder nombreSeeder.
+- llenar Factory del recurso y usuarios.
+- En UserSeed Crear un rol Admin Por DEFECTO:
+                use Caffeinated\Shinobi\Models\Role;
+
+                Role::create([
+                  'name' => 'Admin',
+                  'slug' => 'admin',
+                  'special' => 'all-access', // atributo admite: all-access, no-access o NULL.
+                ]);
+
+- Crear seeder De Permisos: "permissinsTableSeeder"
+- Definir los permisos (index[ruta:index], show[ruta:show], create[Rutas:create,store], edit[Rutas:edit,upadte], destroy[ruta:destroy]) de los roles, usuarios "sin create" y recursos.
+          use Caffeinated\Shinobi\Models\Permission;
+
+          Permission::create([
+              'name' => 'Navegar Usuarios',  //nombres
+              'slug' => 'users.index',      // nombre de permiso por convencion es nombre de la ruta. (puede ser otro)
+              'descripcion' => 'Lista y navega todos los usuarios del Sistema',
+            ]);
+
+- registrar los middleware "role y permission" de CHiNOBi, en kernel.ph->routemiddleware.
+               'role' => \Caffeinated\Shinobi\Middleware\UserHasRole::Class,
+               'permision' => \Caffeinated\Shinobi\Middleware\UserHasPermission::Class,
+
+- En el constructor del Controlador de los Recursos -r. (roles, usuarios y recurso) Relacionar los permisos.
+      //Primero filtro invitados.
+           $this->middleware('auth')->except('index','show');
+      //Luego, se filtran los permisos.
+           $this->middleware('can:projects.create')->only('create','store');
+           $this->middleware('can:projects.edit')->only('edit','update');
+           $this->middleware('can:projects.desroy')->only('desroy');
+
+- Restringir Visualmente EN EL VIEW Blade con el uso de las directivas:
+  @can(recurso.create), @else, cannot(slug),  Para ocultar.
+
+- Asignar el rol al usuario y los permisos a los roles de forma manual
+      - en el modelo user:
+                  use use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
+                  dentro de clase: user HasRolesAndPermissions
+      - en heidiSQL:
+           role_user relacionar role_id y user_id.
+            NOTA: si roles-special tiene all-access, tiene total acceso. (no Reviza la tabla permiso-role)
+                                   tiene no-access, no tiene acceso alguno (no Reviza la tabla permiso-role)
+                                   tiene NULL, tiene acceso especifico (Reviza la tabla permisson_role)
+            NOTA: Definir permisson_role:
+                                   relacionar: permmision_id y role_id (los que sean necesarios)
 
 
 
-
-COMPLETAR CON: 1 - Bienvenido al curso de Roles y Permisos en LARAVEL | Rimorsoft Online
-
-
+      * FALTA: indexar, editar, crear, eliminar... usuario, roles y proyectos. y cambiar los roles y permisos de los usuarios desde la interfaz
+        Gran parte del back-end esta completado
+        se terminara de aprender  a manejar el front-end de aprendible.com y luego se terminará las views que faltan para las autoriazaiones con CHENOBI
+        COTINUAR -  Rimorsoft Online: VIDEO 11 https://www.youtube.com/watch?v=x-lUZSSdh1I&list=PLhCiuvlix-rSgQNLIl7Qg2KbQni3fz-ea&index=11
 
 //////////////////////////ACTUALIZAR LARAVEL - 5.7 a 5.8////////////////////////////////////////////////////////////////////////////////
-DOCUMENTACION: https://styde.net/como-actualizar-de-laravel-5-7-a-5-8/
+DOCUMENTACION 5.7 a 5.8: https://styde.net/como-actualizar-de-laravel-5-7-a-5-8/
+DOCUMENTACION: 5.8 a 6 https://styde.net/como-actualizar-tu-aplicacion-de-laravel-5-8-a-6-0/ Video: https://www.youtube.com/watch?v=zk5xX1x5KCM
 
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////MOSTRAR MENSAJES LOG EN LARAVEL////////////////////////////////////////////////////////
+DOCUMENTACION: https://laravel.com/docs/5.7/logging#writing-log-messages
+use Illuminate\Support\Facades\Log;
+Log::info($message);
+ver en: storage/logs/ archivo actual a lo ultimo
 ///////////////////////////EXTRAS///////////////////////////////////////////////////////////////////////
 - Video 19 - Cómo enviar emails: 100 emials GRATIS al dia con sendgrid en laravel.
 - video 30 - Reutilizar HTML parecidos - Caso: reutilizar Formularios CREATE y EDIT
@@ -633,13 +729,9 @@ DOCUMENTACION: https://styde.net/como-actualizar-de-laravel-5-7-a-5-8/
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
   //////////////////////////////////////////////////////////////////////////////////////////////////////
   *                                 ***********************                                            *
   *                                 *  F R O N T - E N D  *                                            *
   *                                 ***********************                                            *
   //////////////////////////////////////////////////////////////////////////////////////////////////////
-
   LARAVEL MIX Documentacion: https://laravel.com/docs/5.7/mix

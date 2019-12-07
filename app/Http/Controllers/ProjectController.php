@@ -12,10 +12,16 @@ class ProjectController extends Controller
 {
     public function __construct()
     {
-      $this->middleware('auth')->except('index','show'); // los usuarios no identificados solo podran listar y seleccionar los proyectos.
-      $this->middleware('edad')->only('destroy'); //solo los mayores de edad pueden Eliminar
-    }
+      // EJERCICIO $this->middleware('edad')->only('destroy'); //solo los mayores de edad pueden Eliminar
 
+ //Primero autorizados? definir accesos libre-invitados
+      $this->middleware('auth')->except('index','show');
+//luego. definir los permisos
+      $this->middleware('can:projects.create')->only('create','store');
+      $this->middleware('can:projects.edit')->only('edit','update');
+      $this->middleware('can:projects.desroy')->only('desroy');
+
+  }
     /**
      * Display a listing of the resource.
      *
@@ -62,9 +68,7 @@ class ProjectController extends Controller
     public function show($id)
     {
 
-        if (Gate::denies('solo-admin-show-project-3', $id)) {
-              return redirect()->route('projects.index')->with('MensajeStatus', 'Solo admin pueden ver el 3re proyecto');
-       }
+      //  if (Gate::denies('solo-admin-show-project-3', $id)) {  return redirect()->route('projects.index')->with('MensajeStatus', 'Solo admin pueden ver el 3re proyecto');}
 
        $project = Project::findOrfail($id);
        return view('projects.show',['project' => $project]);
