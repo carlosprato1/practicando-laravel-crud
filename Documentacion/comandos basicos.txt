@@ -778,5 +778,5 @@ ver en: storage/logs/ archivo actual a lo ultimo
               - <script src="{{mix('/js/app.js')}}"> defer</script>
 
 //////////////////////////////////BOOTSTRAP 4 /////////////////////////////////////////////////////////////////////////////////////////////////
-
+arreglado
 CONTINuaR: https://www.youtube.com/watch?v=5QB7NZcBRIc&list=PLpKWS6gp0jd_uZiWmjuqLY7LAMaD8UJhc&index=37
