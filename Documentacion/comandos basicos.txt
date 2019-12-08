@@ -4,7 +4,7 @@
 +          * LARAGON actual 4.0.4                                                                +
 +              - PHP actual 7.2.11                                                               +
 +              - MySQL actual 5.7.24                                                             +
-+              - administrador de la BD HeidiSQL                                                 +
++              - HeidiSQL                                                                        +
 +              - laravel actual 5.7.25                                                           +
 +                                                                                                +
 + DOCUMENTACION OFICIAL DE LARAVEL: https://laravel.com/docs/5.7 ; https://laravel.com/api/5.7/  +
@@ -63,6 +63,8 @@ FRONT-END:
       - ctrl-shift-d: duplicar linea actual.
       - ctrl + up o down: mover linea
       - ctrl + shift + p: command palette
+  chrome hotkey:
+      hard reload: ctrl+shit+R
 
    *  Personalizar paginas de Errores de Peticion HTTP.
        Documentacion: https://laravel.com/docs/6.x/errors#custom-http-error-pages
@@ -644,7 +646,7 @@ Para blade usar directivas:  @cannot ('NombreDeRestrincion',$id)  @else  o  @can
 - en .env cambiar cache_driver: "array" y refrescar configuracion "config: clear".
 - Info, ver migraciones de CHINOBi, en directorio:  vendor/caffeinated/shinobi/migrations.
 - Ejecutar migraciones: php artisan migrate
-- instalar sistema de autenticacion php artisan make:auth
+- instalar sistema de autenticacion php artisan make:auth [VER novedades de laravel6 aprendible.com - Extracción del frontend]
 - Crear modelo, factory, migracion, controller -r. [no incluye seeder] >php artisan make:model Proyecto -a
         Nota: modelo de role esta en shinobi y modelo de user esta creado por defecto.
         Nota: verificar Rutas con php artisan route:list. si no crearlas.
@@ -715,16 +717,19 @@ DOCUMENTACION: https://laravel.com/docs/5.7/logging#writing-log-messages
 use Illuminate\Support\Facades\Log;
 Log::info($message);
 ver en: storage/logs/ archivo actual a lo ultimo
+
+
 ///////////////////////////EXTRAS///////////////////////////////////////////////////////////////////////
 - Video 19 - Cómo enviar emails: 100 emials GRATIS al dia con sendgrid en laravel.
 - video 30 - Reutilizar HTML parecidos - Caso: reutilizar Formularios CREATE y EDIT
+- Ejecutar TEST: https://aprendible.com/series/laravel-tips/lecciones/video-como-escribir-tests-en-laravel-52
 - Manejar Datos de las Peticiones: urls, users, cookies.
    Documentacion: https://laravel.com/docs/5.7/requests
 - Manejo de peticiones, reglas buqueda en la BD: Documentacion: https://laravel.com/docs/5.8/queries
 - Reseteo de contraseñas por Email: https://aprendible.com/series/autenticacion/lecciones/personalizando-el-email-de-reseteo-de-contrasena
 - Documentacion Nivel principiante: https://ajgallego.gitbooks.io/laravel-5/content/index.html
 - Servidores Conclusiones:
-    no hay servidor gratuito para subir laravel y un buen broker MQTT. solo tarjeta de credito y por 1año. (google,aws,azure, heroku,)
+    no hay servidor gratuito para subir laravel y un buen broker MQTT. solo por tarjeta de credito y por 1año. (google,aws,azure, heroku  ...)
     opciones un cpu o rasperry. (android NO!). si es con maquina propia. hay que configurar la red y la pc.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -733,5 +738,45 @@ ver en: storage/logs/ archivo actual a lo ultimo
   *                                 ***********************                                            *
   *                                 *  F R O N T - E N D  *                                            *
   *                                 ***********************                                            *
+  *                              CON BOOTSTRAP 4, SAAS Y VUEJS                                         *
+  *                                                                                                    *
   //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////PREPARAR ENTORNO CON LARAVEL MIX/////////////////////////////////////////////////////////////////////////////////////
   LARAVEL MIX Documentacion: https://laravel.com/docs/5.7/mix
+  LARAVEL MIX: API para compilar webpack en laravel. usando pre-procesadores CSS y JS
+
+  Estos son Archivos public /css y /js son los que deben apuntar las Views. Ej:
+  No se deben modificar.
+      - <link rel="stylesheet" href="/css/app.css">  Se encuentra todas las plantillls CSS compiladas en una linea
+      - <script src="/js/app.js"> defer</script>      Se encuentran todos los script compilados en una linea.
+
+  Los archivos fuentes estan en resource /js y /saas (un pre-procesador de CSS .acss)
+      - el codigo css o acss Se debe agregar en saass/app.scss
+      - scripts js debe agregarse en js/app.js
+      - Luego de una modificacion hay que compilar.
+
+ Compilacion de CSS y JS con LARAVEL-MIX
+  Requisitos:
+       solo info: instruciones de compilacion en: webpack.mix.js
+       instalar nodejs y yarn "> npm install --global yarn"
+       instalar dependencias de laravel para el front-end.  definidas en package.json - devDependencies "> yarn" y "">yarn update"
+  Compilar manualmente:
+       > yarn dev   si se compila para ir a producion >yarn prod (mas tiempo)
+  Compilacion Fluida - continua - automaticamente:
+       "> yarn watch" el terminal debe quedar ejecutandose. ctrl+c terminar el proceso.
+
+ Navegador Auto-reload-refresh:
+      en webpack.mix.js Agregar "mix.browserSync("http://app.test");"
+
+  Para evitar hard-reload a los usuarios externos en produccion cuando se actualizan los archivos CSS y JS.
+  cambiandole el nombre a esos archivos automaticamente.
+        en webpack.mix.js Agregar:
+      if(mix.isProduction()){mix.version();}   solo funciona con >yarn prod
+      las referencias AHORA deben hacerse asi:
+              - <link rel="stylesheet" href="{{mix('/css/app.css')}}">
+              - <script src="{{mix('/js/app.js')}}"> defer</script>
+
+//////////////////////////////////BOOTSTRAP 4 /////////////////////////////////////////////////////////////////////////////////////////////////
+
+CONTINuaR: https://www.youtube.com/watch?v=5QB7NZcBRIc&list=PLpKWS6gp0jd_uZiWmjuqLY7LAMaD8UJhc&index=37
