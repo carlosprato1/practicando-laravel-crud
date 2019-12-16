@@ -779,4 +779,5 @@ ver en: storage/logs/ archivo actual a lo ultimo
 
 //////////////////////////////////BOOTSTRAP 4 /////////////////////////////////////////////////////////////////////////////////////////////////
 arreglado
-CONTINuaR: https://www.youtube.com/watch?v=5QB7NZcBRIc&list=PLpKWS6gp0jd_uZiWmjuqLY7LAMaD8UJhc&index=37
+Pero antes refrescar un poco bootstrap4 con: FalconMaster: https://www.youtube.com/watch?v=zC3ebsg8sOo
+Continuar:Aprendile video36 bootstrap4 https://www.youtube.com/watch?v=5QB7NZcBRIc&list=PLpKWS6gp0jd_uZiWmjuqLY7LAMaD8UJhc&index=37
