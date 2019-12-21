@@ -13,7 +13,13 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
-          .active a{
-          	color: RED;
-      	    text-decoration: none;
-          }
+.h-screen{
+  height: 100vh;
+}
+
+
+#hola{background-color: red;}
+#hola-sm{background-color: green;}
+#hola-lg{background-color: yellow;}
+#hola-xl{background-color: blue;}
+#hola-md{background-color: pink;}

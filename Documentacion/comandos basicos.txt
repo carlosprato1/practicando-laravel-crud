@@ -749,7 +749,7 @@ ver en: storage/logs/ archivo actual a lo ultimo
   Estos son Archivos public /css y /js son los que deben apuntar las Views. Ej:
   No se deben modificar.
       - <link rel="stylesheet" href="/css/app.css">  Se encuentra todas las plantillls CSS compiladas en una linea
-      - <script src="/js/app.js"> defer</script>      Se encuentran todos los script compilados en una linea.
+      - <script src="/js/app.js" defer> </script>      Se encuentran todos los script compilados en una linea.
 
   Los archivos fuentes estan en resource /js y /saas (un pre-procesador de CSS .acss)
       - el codigo css o acss Se debe agregar en saass/app.scss
@@ -761,23 +761,35 @@ ver en: storage/logs/ archivo actual a lo ultimo
        solo info: instruciones de compilacion en: webpack.mix.js
        instalar nodejs y yarn "> npm install --global yarn"
        instalar dependencias de laravel para el front-end.  definidas en package.json - devDependencies "> yarn" y "">yarn update"
-  Compilar manualmente:
-       > yarn dev   si se compila para ir a producion >yarn prod (mas tiempo)
-  Compilacion Fluida - continua - automaticamente:
-       "> yarn watch" el terminal debe quedar ejecutandose. ctrl+c terminar el proceso.
 
- Navegador Auto-reload-refresh:
-      en webpack.mix.js Agregar "mix.browserSync("http://app.test");"
+  Compilar manualmente:
+       > yarn dev
+       >yarn prod (mas tiempo)    si se compila para ir a producion
+  Compilacion Fluida - Navegador Auto-refresh:
+        Configuracion: en webpack.mix.js Agregar "mix.browserSync("http://app.test");"
+       "> yarn watch" el terminal debe quedar ejecutandose. ctrl+c terminar el proceso.
 
   Para evitar hard-reload a los usuarios externos en produccion cuando se actualizan los archivos CSS y JS.
   cambiandole el nombre a esos archivos automaticamente.
-        en webpack.mix.js Agregar:
+      Configuracion:  en webpack.mix.js Agregar.
       if(mix.isProduction()){mix.version();}   solo funciona con >yarn prod
       las referencias AHORA deben hacerse asi:
               - <link rel="stylesheet" href="{{mix('/css/app.css')}}">
-              - <script src="{{mix('/js/app.js')}}"> defer</script>
+              - <script src="{{mix('/js/app.js')}}" defer> </script>
 
 //////////////////////////////////BOOTSTRAP 4 /////////////////////////////////////////////////////////////////////////////////////////////////
-arreglado
-Pero antes refrescar un poco bootstrap4 con: FalconMaster: https://www.youtube.com/watch?v=zC3ebsg8sOo
+- FlexBox, SAAS, iframe, GRIDs, figuras, tipografica, imagenes:  guides, shippes.. CSS/HTML/JS https://css-tricks.com/
+Bootstrap4 Esta basado en fLexbox mas el cliente no lo deberia usar directamente.
+
+Refrescar bootstrap4:
+ - en lista de reproduccion de youtube BOOTSTRAP4.
+ - Documentacion Oficial: https://getbootstrap.com/docs/4.4/layout/overview/
+
+
+Barra De Navegacion component/navbar:
+
+
+
+
+
 Continuar:Aprendile video36 bootstrap4 https://www.youtube.com/watch?v=5QB7NZcBRIc&list=PLpKWS6gp0jd_uZiWmjuqLY7LAMaD8UJhc&index=37

@@ -19,7 +19,7 @@
 //Pasos para agregar archivo php con helpers:
 //agregar en composer.json dentro de autoload:
 //"files":["app/helpers.php"]
-
+Route::view('/Boot4/Practica-boot4','/Boot4/Practica-boot4')->name('boot4');
 
 Route::view('/','home')->name('home');
 Route::view('/quienes-somos','about')->name('about');
