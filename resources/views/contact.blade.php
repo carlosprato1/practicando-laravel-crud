@@ -8,8 +8,12 @@
 @include('partials.list-errors-val')
 
 <div class="container">
-
   <div class="row">
+
+    <div class="col-12 col-lg-12 ">
+      @include('partials.Mensaje-Usuario')
+    </div>
+
     <div class="col-12 col-sm-10 col-lg-8 mx-auto">
 
 
@@ -17,6 +21,7 @@
            <form class="bg-white shadow rounded py-3 px-4" method="POST" action="{{route('messege.store')}}">
            @csrf
           <h1 class="display-5">Contactame</h1>
+          <hr>
            <div class="form-group">
              <label for="name">Nombre</label>
              <input id="name" class="form-control bg-light shadow @error ('name') is-invalid @else border-0 @enderror" name="name" placeholder="ingrese su nombre" value="{{old('name')}}">

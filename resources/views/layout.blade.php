@@ -14,16 +14,20 @@
 <body>
 <!-- #app lo utiliza vuejs-->
   <div id='app' class="d-flex flex-column h-screen justify-content-between">
+
       <header>
             @include('partials.nav')
             @include('partials.sesion-status')
       </header>
-      <main>
+
+      <main class="py-4">
             @yield('content')
       </main>
+
       <footer class="bg-while text-center text-black-50 py-3 shadow">
            {{ config('app.name') }} | Copyright @ {{ date('Y') }}
       </footer>
+
   </div>
 
 </body>

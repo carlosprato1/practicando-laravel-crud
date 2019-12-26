@@ -454,6 +454,12 @@ ORM (objeto mapeo relacional) Datos de BD <->  clase/objeto
        Index()  - Listar recursos:
           $tabla = NombreModelo::all();  // me trae todas las filas y columnas de la tabla.
           $tabla = NombreModelo::get();
+          Opcion Paginar: $tabla = tabla::where('votes', '>', 100)->paginate(15);  // 15 - numero de item por pagina.
+               en el View:
+                       <ul>
+                           <li>tabla items...</li>
+                           {{ $projects->links() }}
+                       </ul>
 
        Show()  -  Seleccion por id, Especifico:
           1. html-href: {{route("ruta",objRow)}}
@@ -688,8 +694,8 @@ Para blade usar directivas:  @cannot ('NombreDeRestrincion',$id)  @else  o  @can
   @can(recurso.create), @else, cannot(slug),  Para ocultar.
 
 - Asignar el rol al usuario y los permisos a los roles de forma manual
-      - en el modelo user:
-                  use use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
+      - agregar en el modelo user:
+                  use Caffeinated\Shinobi\Concerns\HasRolesAndPermissions;
                   dentro de clase: user HasRolesAndPermissions
       - en heidiSQL:
            role_user relacionar role_id y user_id.
@@ -702,14 +708,13 @@ Para blade usar directivas:  @cannot ('NombreDeRestrincion',$id)  @else  o  @can
 
 
       * FALTA: indexar, editar, crear, eliminar... usuario, roles y proyectos. y cambiar los roles y permisos de los usuarios desde la interfaz
-        Gran parte del back-end esta completado
+        Gran parte del back-end esta completado y es repetitivo.
         se terminara de aprender  a manejar el front-end de aprendible.com y luego se terminará las views que faltan para las autoriazaiones con CHENOBI
         COTINUAR -  Rimorsoft Online: VIDEO 11 https://www.youtube.com/watch?v=x-lUZSSdh1I&list=PLhCiuvlix-rSgQNLIl7Qg2KbQni3fz-ea&index=11
 
-//////////////////////////ACTUALIZAR LARAVEL - 5.7 a 5.8////////////////////////////////////////////////////////////////////////////////
+//////////////////////////UPDATE - ACTUALIZAR - LARAVEL - 5.7 a 5.8 a 6.0////////////////////////////////////////////////////////////////////////////////
 DOCUMENTACION 5.7 a 5.8: https://styde.net/como-actualizar-de-laravel-5-7-a-5-8/
 DOCUMENTACION: 5.8 a 6 https://styde.net/como-actualizar-tu-aplicacion-de-laravel-5-8-a-6-0/ Video: https://www.youtube.com/watch?v=zk5xX1x5KCM
-
 
 
 ////////////////////////MOSTRAR MENSAJES LOG EN LARAVEL////////////////////////////////////////////////////////
@@ -738,7 +743,6 @@ ver en: storage/logs/ archivo actual a lo ultimo
   *                                 ***********************                                            *
   *                                 *  F R O N T - E N D  *                                            *
   *                                 ***********************                                            *
-  *                              CON BOOTSTRAP 4, SAAS Y VUEJS                                         *
   *                                                                                                    *
   //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -746,50 +750,115 @@ ver en: storage/logs/ archivo actual a lo ultimo
   LARAVEL MIX Documentacion: https://laravel.com/docs/5.7/mix
   LARAVEL MIX: API para compilar webpack en laravel. usando pre-procesadores CSS y JS
 
-  Estos son Archivos public /css y /js son los que deben apuntar las Views. Ej:
+  Estos son Archivos public/css y /js son los que deben apuntar las Views. Ej:
   No se deben modificar.
-      - <link rel="stylesheet" href="/css/app.css">  Se encuentra todas las plantillls CSS compiladas en una linea
-      - <script src="/js/app.js" defer> </script>      Se encuentran todos los script compilados en una linea.
+      - <link rel="stylesheet" href="/css/app.css">   Se encuentra todas las plantillls CSS compiladas en una linea
+      - <script src="/js/app.js" defer> </script>     Se encuentran todos los script compilados en una linea.
 
-  Los archivos fuentes estan en resource /js y /saas (un pre-procesador de CSS .acss)
-      - el codigo css o acss Se debe agregar en saass/app.scss
+  Los archivos fuentes estan en resource /js y /saas
+      - el codigo css o acss Se debe agregar en sass/app.scss
       - scripts js debe agregarse en js/app.js
       - Luego de una modificacion hay que compilar.
 
  Compilacion de CSS y JS con LARAVEL-MIX
   Requisitos:
        solo info: instruciones de compilacion en: webpack.mix.js
-       instalar nodejs y yarn "> npm install --global yarn"
+       instalar nodejs y yarn: "> npm install --global yarn"
        instalar dependencias de laravel para el front-end.  definidas en package.json - devDependencies "> yarn" y "">yarn update"
 
   Compilar manualmente:
-       > yarn dev
+       >yarn dev
        >yarn prod (mas tiempo)    si se compila para ir a producion
   Compilacion Fluida - Navegador Auto-refresh:
         Configuracion: en webpack.mix.js Agregar "mix.browserSync("http://app.test");"
-       "> yarn watch" el terminal debe quedar ejecutandose. ctrl+c terminar el proceso.
+       "> yarn watch", ctrl+c terminar el proceso.
 
   Para evitar hard-reload a los usuarios externos en produccion cuando se actualizan los archivos CSS y JS.
   cambiandole el nombre a esos archivos automaticamente.
       Configuracion:  en webpack.mix.js Agregar.
-      if(mix.isProduction()){mix.version();}   solo funciona con >yarn prod
+            if(mix.isProduction()){mix.version();}   solo funciona con >yarn prod
       las referencias AHORA deben hacerse asi:
               - <link rel="stylesheet" href="{{mix('/css/app.css')}}">
               - <script src="{{mix('/js/app.js')}}" defer> </script>
 
 //////////////////////////////////BOOTSTRAP 4 /////////////////////////////////////////////////////////////////////////////////////////////////
-- FlexBox, SAAS, iframe, GRIDs, figuras, tipografica, imagenes:  guides, shippes.. CSS/HTML/JS https://css-tricks.com/
-Bootstrap4 Esta basado en fLexbox mas el cliente no lo deberia usar directamente.
+ - ilustraciones para paginas web color-modificable: https://undraw.co/
+ - Ver: https://css-tricks.com/  - Todo sobre CSS, tips: fLexbox, iframe, js y mas.
+ - Documentacion Oficial Bootstrap4: https://getbootstrap.com/docs/4.4/layout/overview/
+ - Ejemplos en w3schools: https://www.w3schools.com/bootstrap4/default.asp
 
-Refrescar bootstrap4:
- - en lista de reproduccion de youtube BOOTSTRAP4.
- - Documentacion Oficial: https://getbootstrap.com/docs/4.4/layout/overview/
+UTILLIDADES:
+   -- Todo Sobre el sistema Grid: https://getbootstrap.com/docs/4.0/layout/grid/
+     - Boxs resposivos
+     - alinear/Alignment boxs vertical y horizontal.
+     - margenes o offset: offsetting-columns
+     - boxs anidados
+  -- media objets: https://getbootstrap.com/docs/4.0/layout/media-object/
+     - Maneja de manera sencilla el grupo: mini-imagen, titulo y texto. tipo comentario de usuario.
+  -- utilidades para maquetar:
+      - propiedades de visualizacion: https://getbootstrap.com/docs/4.0/utilities/display/
+           - ocultar boxs dependiendo de la panalla vertical.
+           - inline: box comparte linea con otro.
+           - block: box ocupa toda la linea.
+      - propiedades d-Flex:   https://getbootstrap.com/docs/4.0/utilities/flex/
+           - alinea, ordenar y tamaño los box de manera avanzada
+     - propiedades de text:  https://getbootstrap.com/docs/4.0/utilities/text/#text-alignment
+           alinear, ordenar, color, forma de texto de los boxs
+     - spacing/ margenes y relleno : https://getbootstrap.com/docs/4.4/utilities/spacing/
+          relleno, y margenes. ver en "w3schools Bootstrap 4 Utilities/spacing".
 
 
-Barra De Navegacion component/navbar:
+ COMPONENTES:
+    * Navbar - Documentacion: https://getbootstrap.com/docs/4.4/components/navbar/
+    * Formularios -  Documentacion:  https://getbootstrap.com/docs/4.3/components/forms/
+
+Pasos:
+  En layout:
+        - cambiar el extends del layout de las views/auth.
+        - agregar  el viewport, el CSRF para axiox, id=app del body para VUEJS
+        - el body se divide en:
+            <header>
+            <main>
+            <footer class="bg-while text-center text-black-50 py-3 shadow"> investigar CSS
+  Agregar: Navbar  Formulario:
+
+* CSS:
+ definir en: resource/sass/_variables.scss
+      - color primario: $primary
+      - $enable-responsive-font-sizes: true; habilitartitulos responsive
+      - color fondo $body-bg
+      - $enable-gradients:true; botones 3D
+ Definir en: resource/sass/app.scss
+      - .h-screen { height: 100vh;} body/app ocupe hasta abajo la ventana, si el tamaño del contenido vertical lo define
 
 
+  body/app  "d-flex flex-column justify-content-between"
+                  d-flex: declara que usara la utilidad flex.
+                  flex-column: los elementos se ordenar por columna una debajo del otro.
+                  justify-content-between: separar los boxs equitativamente.
+  footer: "bg-while text-center text-black-50 py-3 shadow"
+                  py-3:
+                  shadow: borde con sombra.
+  contenido-body y Formuario:
+      - conteiner: margenes Verticales pequeños. en sm desaparecen.
+         - row: todo col debe ir en un row/fila.
+            - "col-12 col-sm-10 col-lg-8 mx-auto"  Evita que el contenido se vuelva gigante horizontalmente y lo centra.
+                 col-12:  <sm  abarga los 12
+                 col-sm-10: >sm  abarca 10
+                 col-lg-8: >lg abarca 8
+                 mx-auto: siempre centra el contenido horizontalmente.
+
+               - form: bg-white shadow rounded py-3 px-4
+                   bg-white: background color blanco
+                   rounded: redondear bordes
+                   py-3: {property}{sides}-{size}
+                        (p-padding/relleno)(y-top-buttom)--(3- 1rem)
+                   px-4:
+                       (p-padding/relleno)(x-left-right)--(4- 1.5rem)
+                <hr> : linea de separacion horizontal.
+  Tablas -index:
+           - align-items-center: centra verticalmente.
+          -
 
 
-
-Continuar:Aprendile video36 bootstrap4 https://www.youtube.com/watch?v=5QB7NZcBRIc&list=PLpKWS6gp0jd_uZiWmjuqLY7LAMaD8UJhc&index=37
+Continuar:Aprendile video37 bootstrap4 https://www.youtube.com/watch?v=twwWdfpLuKI&list=PLpKWS6gp0jd_uZiWmjuqLY7LAMaD8UJhc&index=38
