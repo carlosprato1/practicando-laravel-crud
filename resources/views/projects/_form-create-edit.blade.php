@@ -31,6 +31,8 @@ para eso se le paso en create un "new proyecto"
         >
           {{ old('description',$project->description)}}</textarea>
   </div>
+
+  
     <button class="btn btn-primary btn-lg btn-block">{{$btnTxt}}</button>
 
     <a class="btn btn-link btn-block"

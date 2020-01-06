@@ -24,9 +24,9 @@ class saveProjectRequesst extends FormRequest
     public function rules()
     {
         return [
-          'title' => 'required',     //no null
-          'url' => 'required',
-          'description' => 'required',
+          'title' => 'required|max:100',     //no null
+          'url' => 'required|url|max:300',
+          'description' => 'required|max:300',
         ];
     }
 

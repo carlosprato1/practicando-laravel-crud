@@ -2,10 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\saveUserRequest;
+use Caffeinated\Shinobi\Models\Role;
+use Illuminate\Validation\Rule;
+      //  use Illuminate\Support\Facades\Log;
+//use Illuminate\Support\Facades\Gate;
+
+
 
 class userController extends Controller
 {
+
+  public function __construct()
+  {
+    // EJERCICIO $this->middleware('edad')->only('destroy'); //solo los mayores de edad pueden Eliminar
+
+//Primero autorizados? definir accesos libre-invitados
+    $this->middleware('auth'); // invitados solo pueden ver
+//luego. definir los permisos
+    $this->middleware('can:users.index')->only('index');
+    $this->middleware('can:users.show')->only('show');
+    // $this->middleware('can:users.create')->only('create','store');  usuario no crea usuaros, Se hace por el modulo de Registro
+    $this->middleware('can:users.edit')->only('edit','update');
+    $this->middleware('can:users.desroy')->only('desroy');
+
+}
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +36,9 @@ class userController extends Controller
      */
     public function index()
     {
-        //
+       $users = User::orderBy('created_at','DESC')->paginate(10);   // no puedo usar el mismo nombre $users para variables callback como destroy o updata
+
+     return view('User.index',compact('users'));
     }
 
     /**
@@ -23,7 +48,8 @@ class userController extends Controller
      */
     public function create()
     {
-        //
+    //  return view('users.create',['user' => new User]);  usuario no crea usuaros, Se hace por el modulo de Registro
+
     }
 
     /**
@@ -34,7 +60,9 @@ class userController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       //  usuario no crea usuaros, Se hace por el modulo de Registro
+    //  Project:: create( $request->validated() );
+    //  return redirect()->route('users.index')->with('MensajeStatus', 'Usuario Almacenado');
     }
 
     /**
@@ -45,7 +73,9 @@ class userController extends Controller
      */
     public function show($id)
     {
-        //
+      $users = User::findOrfail($id);     // no puedo usar el mismo nombre $users para variables callback como destroy o updata
+      return view('User.show',['user' => $users]);
+
     }
 
     /**
@@ -56,7 +86,9 @@ class userController extends Controller
      */
     public function edit($id)
     {
-        //
+       $roles = Role::get();
+       $user = User::findOrfail($id);
+      return view('User.edit', compact('user','roles'));
     }
 
     /**
@@ -66,9 +98,16 @@ class userController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(User $user, saveUserRequest $request)  //no puedo  usar "$users" no se porque
+    {  //cada usuario se debe poder editar asi mismom no los demass?
+
+        $user->update(  $request->validated() );  // update usuario
+
+
+        auth()->user()->syncRoles($request->get('list-roles'));  // update role de usuario ver documentacion chinobi
+
+        return redirect()->route('users.show',['user' => $user])->with('MensajeStatus', 'Usuario Actualizado');
+
     }
 
     /**
@@ -77,8 +116,11 @@ class userController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)  ////no puedo  usar "$users" no se porque
     {
-        //
+
+      $user->delete();  //pendiente con el nombre de la variable $users no funcionada no se porque
+    //  Project::destroy($id);
+      return redirect()->route('users.index')->with('MensajeStatus' , 'Usuario Eliminado');
     }
 }

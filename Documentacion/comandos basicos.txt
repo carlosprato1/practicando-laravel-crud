@@ -422,6 +422,11 @@ Documentacion: https://laravel.com/docs/5.8/validation#available-validation-rule
             //si retora false, devulde un 403 "Prohibido"
             //si retorna true, continua-llama al metodo rules().  ejemplo: return $this->user()->isadmin();
             Rules(): se deben definir las reglas de validacion.
+              Importante: regla para ignorar unique cuando Actualiza "$this->user" DEbe ser El mismo que el definido en el meto que llama al  $request->validated() en el controlador Este caso update
+                    'email' => [
+                        'required',
+                         Rule::unique('users','email')->ignore($this->user),  // tiene que ser el mismo que el definido en update.
+                      ],
             messeges(): modificar mensajes
 
         - en controlador:
@@ -705,19 +710,30 @@ Para blade usar directivas:  @cannot ('NombreDeRestrincion',$id)  @else  o  @can
             NOTA: Definir permisson_role:
                                    relacionar: permmision_id y role_id (los que sean necesarios)
 
+- Para Usuario se Podra editar el Rol - EDITAR USUARIO SOLO ROLES.
+     - Agregar: en controlador de user: use Caffeinated\Shinobi\Models\Role;
+     - $roles = Role::get();  y pasarla al view para listar en un checkbox
+     - En la view: checkbox para que usuario puede eligir multiples roles. ver Boots4 checkbox custom BASICO:
+                             <label  for="{{ $role -> id}}"> {{ $role -> name}}  </label>
+                             <input type="checkbox" name="list-roles[]" value="{{ $role -> name}}" id="{{ $role -> id}}">
+
+     - En controlador update(): sincronizar roles asignador al usuario Ver link de Documentacion de shinobi.
+        -   auth()->user()->syncRoles($request->get('list-roles'));
 
 
-      * FALTA: indexar, editar, crear, eliminar... usuario, roles y proyectos. y cambiar los roles y permisos de los usuarios desde la interfaz
-        Gran parte del back-end esta completado y es repetitivo.
-        se terminara de aprender  a manejar el front-end de aprendible.com y luego se terminará las views que faltan para las autoriazaiones con CHENOBI
-        COTINUAR -  Rimorsoft Online: VIDEO 11 https://www.youtube.com/watch?v=x-lUZSSdh1I&list=PLhCiuvlix-rSgQNLIl7Qg2KbQni3fz-ea&index=11
+
+///////////////////////////  FALTA   -  CONTINUAR/////////////////////////////////////////////
+
+      -   COTINUAR: Rimorsoft Online: VIDEO 19 https://www.youtube.com/watch?v=hIzkoLJM-Ho&list=PLhCiuvlix-rSgQNLIl7Qg2KbQni3fz-ea&index=19
+      -   FALTA:    proyecto a parte: Eloquent ORM | Rimorsoft Online  https://www.youtube.com/watch?v=IaVmfb-f6TE&list=PLhCiuvlix-rT96yLQTTr3-eTZl6sbhVte&index=26
+      -   FALTA:    creo que proyecto a parte: CRUB dinamico con VUEJS de rimorsoft.
 
 //////////////////////////UPDATE - ACTUALIZAR - LARAVEL - 5.7 a 5.8 a 6.0////////////////////////////////////////////////////////////////////////////////
 DOCUMENTACION 5.7 a 5.8: https://styde.net/como-actualizar-de-laravel-5-7-a-5-8/
 DOCUMENTACION: 5.8 a 6 https://styde.net/como-actualizar-tu-aplicacion-de-laravel-5-8-a-6-0/ Video: https://www.youtube.com/watch?v=zk5xX1x5KCM
 
 
-////////////////////////MOSTRAR MENSAJES LOG EN LARAVEL////////////////////////////////////////////////////////
+////////////////////////MOSTRAR MENSAJES LOG EN LARAVEL - debug////////////////////////////////////////////////////////
 DOCUMENTACION: https://laravel.com/docs/5.7/logging#writing-log-messages
 use Illuminate\Support\Facades\Log;
 Log::info($message);
@@ -825,7 +841,7 @@ Pasos:
 * CSS:
  definir en: resource/sass/_variables.scss
       - color primario: $primary
-      - $enable-responsive-font-sizes: true; habilitartitulos responsive
+      - $enable-responsive-font-sizes: true; enable responsive en h1, h2... <h1 class="display-5" >
       - color fondo $body-bg
       - $enable-gradients:true; botones 3D
  Definir en: resource/sass/app.scss
@@ -851,14 +867,12 @@ Pasos:
                - form: bg-white shadow rounded py-3 px-4
                    bg-white: background color blanco
                    rounded: redondear bordes
-                   py-3: {property}{sides}-{size}
+                   py-3: {property}{sides}-{size} ver : spacing
                         (p-padding/relleno)(y-top-buttom)--(3- 1rem)
                    px-4:
                        (p-padding/relleno)(x-left-right)--(4- 1.5rem)
                 <hr> : linea de separacion horizontal.
   Tablas -index:
            - align-items-center: centra verticalmente.
-          -
 
-
-Continuar:Aprendile video37 bootstrap4 https://www.youtube.com/watch?v=twwWdfpLuKI&list=PLpKWS6gp0jd_uZiWmjuqLY7LAMaD8UJhc&index=38
+continuar: Aprender a implementar Vuejs para paginas dinamicas aplicar cambios html sin refrescar ajax/axiox y usar ciclos https://www.youtube.com/watch?v=zpczDV9KPcQ&list=PLhCiuvlix-rSduJ-vKGpPj5xxcmeLabXc&index=4

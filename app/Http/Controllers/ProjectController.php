@@ -15,7 +15,7 @@ class ProjectController extends Controller
       // EJERCICIO $this->middleware('edad')->only('destroy'); //solo los mayores de edad pueden Eliminar
 
  //Primero autorizados? definir accesos libre-invitados
-      $this->middleware('auth')->except('index','show');
+      $this->middleware('auth')->except('index','show'); // invitados solo pueden ver
 //luego. definir los permisos
       $this->middleware('can:projects.create')->only('create','store');
       $this->middleware('can:projects.edit')->only('edit','update');
@@ -104,7 +104,7 @@ class ProjectController extends Controller
     {
 
         $project->update(  $request->validated() );
-        return redirect()->route('projects.show',['project' => $project])->with('MensajeStatus', 'Proyeto Actualizado');;
+        return redirect()->route('projects.show',['project' => $project])->with('MensajeStatus', 'Proyeto Actualizado');
     }
 
     /**
@@ -117,6 +117,7 @@ class ProjectController extends Controller
     {
       // Project::destroy::($id)    //por id
       $project->delete();
-      return redirect()->route('projects.index')->with('MensajeStatus', 'Proyeto Eliminado');;
+
+      return redirect()->route('projects.index')->with('MensajeStatus', 'Proyeto Eliminado');
     }
 }

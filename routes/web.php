@@ -26,6 +26,7 @@ Route::view('/quienes-somos','about')->name('about');
 Route::view('/contacto','contact')->name('contact');
 
 Route::resource('/projects','ProjectController'); //nombre predetermiado projects.index.
+Route::resource('/users','userController'); //nombre predetermiado users.index.
 
 Route::post('contact', 'MessageController@store')->name('messege.store');
 

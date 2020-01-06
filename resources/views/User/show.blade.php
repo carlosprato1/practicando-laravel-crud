@@ -1,39 +1,40 @@
 @extends('layout')
-@section('title','Proyecto | '.$project -> title)
+@section('title','Usuario | '.$user -> name)
 @section('content')
 
 
 <div class="container">
   <div class="bg-white p-5 shadow rounded">
 
-    <h1>{{$project -> title}}</h1>
-    <p class="text-btn-secondary">{{ $project-> description }}</p>
-    <p class="text-black-50">{{ $project-> created_at -> diffForHumans() }}</p>
+    <h1>{{$user -> name}}</h1>
+    <p class="text-btn-secondary">Email: {{ $user-> email }}</p>
+    <p class="text-btn-secondary">Edad: {{ $user-> edad }}</p>
+    <p class="text-black-50">{{ $user-> created_at -> diffForHumans() }}</p>
 
      <div class="d-flex justify-content-between align-items-center">
 
 
-          <a href="{{ route('projects.index') }}">
+          <a href="{{ route('users.index') }}">
            Regresar</a>
 
           <div class="btn-group btn-group-sm ">
-                  @can ('projects.edit')
+                  @can ('users.edit')
                        <a class="btn btn-primary rounded"
-                        href="{{route('projects.edit',$project)}}"
+                        href="{{route('users.edit',$user)}}"
                         >Editar</a>
                   @endcan
 
 
 
-                  @can ('projects.destroy')
+                  @can ('users.destroy')
                     <a class="btn btn-danger rounded"
                        href="#"
-                       onclick="document.getElementById('delete-project').submit()"
+                       onclick="document.getElementById('delete-user').submit()"
                    >Eliminar</a>
 
                     <form class="d-none"
-                       id="delete-project"
-                       action="{{route('projects.destroy',$project)}}"
+                       id="delete-user"
+                       action="{{route('users.destroy',$user)}}"
                        method="post">
                        @csrf
                        @method('DELETE')
