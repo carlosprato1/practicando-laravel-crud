@@ -33,3 +33,21 @@ const app = new Vue({
 });
 
 //alert("holis");
+
+//Roles - editar: check and unckeck radios an checkboxex automaticamente
+
+$(document).ready(function () {
+    $('input[name ="customRadio"]').change(function () {
+        if ($(this).val() == "no-access") {
+            $('input[name ="list-permisos[]"]').prop("checked", false);
+        }
+        if ($(this).val() == "all-access") {
+           $('input[name ="list-permisos[]"]').prop("checked", true);
+        }
+    });
+});
+$(document).ready(function () {
+    $('input[name ="list-permisos[]"]') .change(function () {
+        $('input[name ="customRadio"]').prop("checked", false);
+    });
+});

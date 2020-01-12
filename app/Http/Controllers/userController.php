@@ -86,9 +86,11 @@ class userController extends Controller
      */
     public function edit($id)
     {
-       $roles = Role::get();
-       $user = User::findOrfail($id);
-      return view('User.edit', compact('user','roles'));
+        $user = User::findOrfail($id);
+        $currenRoles = $user->roles;
+        $roles = Role::get();
+
+      return view('User.edit', compact('user','roles','currenRoles'));
     }
 
     /**
@@ -100,14 +102,10 @@ class userController extends Controller
      */
     public function update(User $user, saveUserRequest $request)  //no puedo  usar "$users" no se porque
     {  //cada usuario se debe poder editar asi mismom no los demass?
-
         $user->update(  $request->validated() );  // update usuario
-
-
-        auth()->user()->syncRoles($request->get('list-roles'));  // update role de usuario ver documentacion chinobi
+        $user->syncRoles($request->get('list-roles'));  // update role de usuario ver documentacion chinobi
 
         return redirect()->route('users.show',['user' => $user])->with('MensajeStatus', 'Usuario Actualizado');
-
     }
 
     /**

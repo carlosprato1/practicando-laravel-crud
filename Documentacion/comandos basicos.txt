@@ -659,9 +659,9 @@ Para blade usar directivas:  @cannot ('NombreDeRestrincion',$id)  @else  o  @can
 - Ejecutar migraciones: php artisan migrate
 - instalar sistema de autenticacion php artisan make:auth [VER novedades de laravel6 aprendible.com - Extracción del frontend]
 - Crear modelo, factory, migracion, controller -r. [no incluye seeder] >php artisan make:model Proyecto -a
-        Nota: modelo de role esta en shinobi y modelo de user esta creado por defecto.
-        Nota: verificar Rutas con php artisan route:list. si no crearlas.
+        Nota: modelo de user esta creado por defecto, modelo de rol y permisos esta creado por shinobi.
         Nota: Crear controller -r: userController y roleController
+        nota:
 - crear seeders recursoSeeder y userSeeder.    >php artisan make:seeder nombreSeeder.
 - llenar Factory del recurso y usuarios.
 - En UserSeed Crear un rol Admin Por DEFECTO:
@@ -717,14 +717,16 @@ Para blade usar directivas:  @cannot ('NombreDeRestrincion',$id)  @else  o  @can
                              <label  for="{{ $role -> id}}"> {{ $role -> name}}  </label>
                              <input type="checkbox" name="list-roles[]" value="{{ $role -> name}}" id="{{ $role -> id}}">
 
-     - En controlador update(): sincronizar roles asignador al usuario Ver link de Documentacion de shinobi.
-        -   auth()->user()->syncRoles($request->get('list-roles'));
+     - En user controlador update(): sincronizar roles asignador al usuario Ver link de Documentacion de shinobi.
+        -   $user->syncRoles($request->get('list-roles'));    "$user" es el usuario al que queremos asignarle los roles
+     - EN rol controlador store o update:
+        -   $rol->syncPermissions($request->get('list-permisos'));   "$rol" es el rol el cual queremos asignarle los permisos
 
 
 
 ///////////////////////////  FALTA   -  CONTINUAR/////////////////////////////////////////////
-
-      -   COTINUAR: Rimorsoft Online: VIDEO 19 https://www.youtube.com/watch?v=hIzkoLJM-Ho&list=PLhCiuvlix-rSgQNLIl7Qg2KbQni3fz-ea&index=19
+        - arreglar error de role  editar
+      -   COTINUAR: Rimorsoft Online: VIDEO 20 https://www.youtube.com/watch?v=hIzkoLJM-Ho&list=PLhCiuvlix-rSgQNLIl7Qg2KbQni3fz-ea&index=19
       -   FALTA:    proyecto a parte: Eloquent ORM | Rimorsoft Online  https://www.youtube.com/watch?v=IaVmfb-f6TE&list=PLhCiuvlix-rT96yLQTTr3-eTZl6sbhVte&index=26
       -   FALTA:    creo que proyecto a parte: CRUB dinamico con VUEJS de rimorsoft.
 
@@ -817,7 +819,7 @@ UTILLIDADES:
            - inline: box comparte linea con otro.
            - block: box ocupa toda la linea.
       - propiedades d-Flex:   https://getbootstrap.com/docs/4.0/utilities/flex/
-           - alinea, ordenar y tamaño los box de manera avanzada
+           - alinea, ordenar y tamaño los boxes! de manera avanzada
      - propiedades de text:  https://getbootstrap.com/docs/4.0/utilities/text/#text-alignment
            alinear, ordenar, color, forma de texto de los boxs
      - spacing/ margenes y relleno : https://getbootstrap.com/docs/4.4/utilities/spacing/

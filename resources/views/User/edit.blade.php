@@ -55,7 +55,7 @@
                   <label for='roles'>Lista de Roles</label>
                      @foreach ($roles as $role)
                        <div name="roles" class="custom-control custom-checkbox">
-                           <input type="checkbox" name="list-roles[]" class="custom-control-input" id="{{ $role -> id}}" value="{{ $role -> name}}">
+                           <input type="checkbox" name="list-roles[]" class="custom-control-input" id="{{ $role -> id}}" value="{{ $role -> slug}}" {{ setCheked($role,$currenRoles) }}>
                            <label class="custom-control-label" for="{{ $role -> id}}">{{ $role -> name}}</label>
                            <em>({{ $role -> description ?: 'Sin Descripcion'}})</em>
                       </div>

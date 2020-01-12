@@ -25,6 +25,7 @@
           <li class="nav-item"><a class="nav-link" href="{{Route('login')}}">Login</a></li>
 
         @else  {{--boton submit del formulario con JS para poder organizarlo cn una tabla--}}
+          <a class="nav-link {{setActive('roles.*')}}" href="{{Route('roles.index')}}">Roles</a>
           <li class="nav-item"> <a class="nav-link" href="#" onclick="event.preventDefault();
             document.getElementById('logout-form').submit();"> Cerrar Sesion </a>
           </li>
