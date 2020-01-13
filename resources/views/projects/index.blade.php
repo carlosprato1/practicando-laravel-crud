@@ -5,7 +5,7 @@
 
 
 <div class="container">
-
+  <div class="col-12 col-lg-10 mx-auto">
   <div class="d-flex justify-content-between align-items-center mb-3">
 
      <h1 class="display-4 mb-0">Listado de Proyectos</h1>
@@ -33,6 +33,6 @@
       	  @endforelse
             {{ $projects->links() }}
       </ul>
-
+ </div>
 </div>
 @endsection

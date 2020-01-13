@@ -12,20 +12,20 @@
 +------------------------------------------------------------------------------------------------+
 
 /////////////////////////////////INDICE/////////////////////////////////////////////////////////////
-  Nivel principiante
-BACK-END:
-  Notas Basicas.
-  Routes.
-  Views con blade.
-  Controladores.
-  Migraciones.
-  Formularios - Validaciones.
-  Eloquen.
-  Sesiones.
-  Mensajes flash o de sesion.
-  Autenticacion: login, registro, logout.
-  Extras.
-FRONT-END:
+        Nivel principiante
+      BACK-END:
+        Notas Basicas.
+        Routes.
+        Views con blade.
+        Controladores.
+        Migraciones.
+        Formularios - Validaciones.
+        Eloquen.
+        Sesiones.
+        Mensajes flash o de sesion.
+        Autenticacion: login, registro, logout.
+        Extras.
+      FRONT-END:
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 *                                 ***********************                                            *
@@ -92,31 +92,31 @@ FRONT-END:
 
 
 
-+ -------Opciones para retornar vistas o datos directamente (Sin controllers)--------------+
-+   * Responder solo texto                                                                 +
-+       Route::get('ruta1',function{                                                       +
-+       return "responder solo este Texto";})->name('nombre-clave');                       +
-+                                                                                          +
-+   * Responder View                                                                       +
-+       Route::view('/about','about')->name('about')                                       +
-+                                                                                          +
-+   * Captar datos por la url y responder un View. ej. localhost/subpagina/valor	         +
-+      Route::get('/ruta/{variable?}', function ($variable = 'valor_predeterminado') {     +
-+         return view('nombre_view',['variable' -> $variable]);				                     +
-+      })->name('nombre-clave');							                                             +
-+											                                                                     +
-+   * Responder View pasandole una constante:					                                     +
-+      Route::view('/ruta','subpagina',['variable' => 'CONSTANTE'])->name('nombre-clave'); +
-+									                                                                  		   +
-+   * Responder View pasandole un array:						                                       +
-+       <?php										                                                           +
-+         $array = [									                                                     +
-+            ['title'=>'valor1'], 							                                           +
-+            ['title'=>'valor2'],						                                          	   +
-+         ];			                                                                         +
-+							                                                                             +
-+    Route::view('/ruta','subpagina',compact('array'))->name('nombre-clave');	             +
-+----------------------------------------------------------------------------------------- +
+  + -------Opciones para retornar vistas o datos directamente (Sin controllers)--------------+
+  +   * Responder solo texto                                                                 +
+  +       Route::get('ruta1',function{                                                       +
+  +       return "responder solo este Texto";})->name('nombre-clave');                       +
+  +                                                                                          +
+  +   * Responder View                                                                       +
+  +       Route::view('/about','about')->name('about')                                       +
+  +                                                                                          +
+  +   * Captar datos por la url y responder un View. ej. localhost/subpagina/valor	         +
+  +      Route::get('/ruta/{variable?}', function ($variable = 'valor_predeterminado') {     +
+  +         return view('nombre_view',['variable' -> $variable]);				                     +
+  +      })->name('nombre-clave');							                                             +
+  +											                                                                     +
+  +   * Responder View pasandole una constante:					                                     +
+  +      Route::view('/ruta','subpagina',['variable' => 'CONSTANTE'])->name('nombre-clave'); +
+  +									                                                                  		   +
+  +   * Responder View pasandole un array:						                                       +
+  +       <?php										                                                           +
+  +         $array = [									                                                     +
+  +            ['title'=>'valor1'], 							                                           +
+  +            ['title'=>'valor2'],						                                          	   +
+  +         ];			                                                                         +
+  +							                                                                             +
+  +    Route::view('/ruta','subpagina',compact('array'))->name('nombre-clave');	             +
+  +----------------------------------------------------------------------------------------- +
 
 
 ///////////////////////// VIEW CON BLADE ///////////////////////////////////////////////////
@@ -191,6 +191,7 @@ FRONT-END:
     +     <p>This is my body content.</p>                  +
     +  @endsection                                         +
     +------------------------------------------------------+
+
 
 //////////////////// CONTROLADORES ///////////////////////////////////////////////////////////////
    * Documentacion: https://laravel.com/docs/5.7/controllers
@@ -275,6 +276,7 @@ FRONT-END:
 
 
 /////////////////////////////MIGRACIONES/////////////////////////////////////////////////////////////////
+
 https://laravel.com/docs/5.8/migrations#introduction
 
   Crear, Manipular la BD con control de Versiones. En DOWN() se revierte lo del UP().
@@ -358,7 +360,9 @@ https://laravel.com/docs/5.8/migrations#introduction
           >php artisan migrate:reset            -> Ejecuta los metodos DOWN de todas las migraciones.
           >php artisan migrate:fresh --seed     -> Ejecuta RESET and MIGRATE.   (aplica cambios hechos en los UP() pero se destruyen todos los datos!)
 
-/////////////////////////////SEEDERS Y FACTORY/////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////SEEDERS Y FACTORY//////////////////////////////////////////////////////////////////////////////////
+
 DOCUMENTACION: https://laravel.com/docs/master/seeding
  crear:  php artisan make:seeder TableSeeder   (no se relaciona con una tabla aqui)
  registrar en: database/seeds/DatabaseSeeder.php.  Agregar: this->call(NombreSeeder::class);
@@ -372,16 +376,18 @@ DOCUMENTACION: https://laravel.com/docs/master/seeding
                          'password' => bcrypt('secret'),
                       ]);
 
- *  FACTORY: LLENAR AUTOMATICAMENTE.
- DOCUMENTACION: https://laravel.com/docs/6.x/database-testing#writing-factories
- LISTADO DE FAKERS: https://github.com/fzaninotto/Faker
+*  FACTORY: LLENAR AUTOMATICAMENTE.
+   DOCUMENTACION: https://laravel.com/docs/6.x/database-testing#writing-factories
+   LISTADO DE FAKERS: https://github.com/fzaninotto/Faker
 
-  Crear: > php artisan make:factory recursoFactory --model recursoModel
-  Agregar al Seeder:   factory(App\recursoModel::class, 10)->create();
+      Crear: > php artisan make:factory recursoFactory --model recursoModel
+      Agregar al Seeder:   factory(App\recursoModel::class, 10)->create();
 
-Run DatabaseSeeder:
-Run seeder:              php artisan db:seed
-migrate and run seeders: php artisan migrate:refresh --seed
+    Run DatabaseSeeder:
+    Run seeder:              php artisan db:seed
+    migrate and run seeders: php artisan migrate:refresh --seed
+
+
 ////////////////////////// FORMULARIOS - VALIDACIONES CON BLADE /////////////////////////////////////////
 Documentacion: https://laravel.com/docs/5.8/validation#available-validation-rules
 
@@ -437,7 +443,8 @@ Documentacion: https://laravel.com/docs/5.8/validation#available-validation-rule
         - Para Guardar en la BD, MODELO:
            - Ver: ORM - Eloquent, CRUB - Store.
 
-////////////////////////////////////ELOQUEN/////////////////////////////////////////////////////////////
+
+////////////////////////////////////ELOQUEN - CRUB/////////////////////////////////////////////////////////////
 Documentacion: https://laravel.com/docs/5.8/eloquent
 ORM (objeto mapeo relacional) Datos de BD <->  clase/objeto
 
@@ -512,13 +519,16 @@ ORM (objeto mapeo relacional) Datos de BD <->  clase/objeto
     3.  @csrf @method('DELETE');
     4. $project->delete();
 
+
 /////////////////////////////SESIONES///////////////////////////////////////////////////////////////////////////////////
-Documentacion: https://laravel.com/docs/5.7/session
-almacenamiento temporal de usuario actual
-configurar app/config/sesion.php
-  drive: tipo de archivo donde se almacenaran estos datos:
-     file - funciona bien, un archivo por cada navegador abierto
-     directorio del file: app/storage/framework/sessions
+  Documentacion: https://laravel.com/docs/5.7/session
+
+  // almacenamiento temporal de usuario actual
+
+    configurar app/config/sesion.php
+      drive: tipo de archivo donde se almacenaran estos datos:
+         file - funciona bien, un archivo por cada navegador abierto
+         directorio del file: app/storage/framework/sessions
 
 
 ////////////////////////MENSAJES FLASH o SESION////////////////////////////////////////////////////////////////////
@@ -530,14 +540,14 @@ Documentacion: https://laravel.com/docs/6.x/responses#redirecting-with-flashed-s
                     se procesa el mensaje con blade.
 // Notificaciones para los REST: store,update y destroy.
 
-1. redireccionar a la view donde queremos mostrar el mensaje.
-      return back()->with('keyStatus','Mensaje');
-      return redirect()->with('keyStatus','Mensaje');
-2. con with('key','mensaje') //guarda el mensaje en session en el key.
-3. con las directivas de blade procesamos el mensaje.
-          @if (session('MensajeStatus')) //hay mensaje?
-             {{session('MensajeStatus')}} // mostrar mensajes
-4. se puede mostrar el mnesaje en el layout.
+    1. redireccionar a la view donde queremos mostrar el mensaje.
+          return back()->with('keyStatus','Mensaje');
+          return redirect()->with('keyStatus','Mensaje');
+    2. con with('key','mensaje') //guarda el mensaje en session en el key.
+    3. con las directivas de blade procesamos el mensaje.
+              @if (session('MensajeStatus')) //hay mensaje?
+                 {{session('MensajeStatus')}} // mostrar mensajes
+    4. se puede mostrar el mnesaje en el layout.
 
 ///////////////////////////AUTENTICACION:-LOGIN-Y-REGISTRO-DE-USUARIO//////////////////////////////////////////////////////
 Documentacion: https://laravel.com/docs/5.7/authentication
@@ -673,6 +683,8 @@ Para blade usar directivas:  @cannot ('NombreDeRestrincion',$id)  @else  o  @can
                   'special' => 'all-access', // atributo admite: all-access, no-access o NULL.
                 ]);
 
+                $user = User::find(1)->assignRoles('admin'); // asignar el rol admin al primer usuario
+
 - Crear seeder De Permisos: "permissinsTableSeeder"
 - Definir los permisos (index[ruta:index], show[ruta:show], create[Rutas:create,store], edit[Rutas:edit,upadte], destroy[ruta:destroy]) de los roles, usuarios "sin create" y recursos.
           use Caffeinated\Shinobi\Models\Permission;
@@ -722,13 +734,11 @@ Para blade usar directivas:  @cannot ('NombreDeRestrincion',$id)  @else  o  @can
      - EN rol controlador store o update:
         -   $rol->syncPermissions($request->get('list-permisos'));   "$rol" es el rol el cual queremos asignarle los permisos
 
+    - Usuarios recien registrados tendran por defecto el rol "invitado"
+          En: ../Illuminate/fundation/auth/access/registerUsers.PHP
 
+           protected function registered(Request $request, $user){ $user->assignRoles('invitado'); }
 
-///////////////////////////  FALTA   -  CONTINUAR/////////////////////////////////////////////
-        - arreglar error de role  editar
-      -   COTINUAR: Rimorsoft Online: VIDEO 20 https://www.youtube.com/watch?v=hIzkoLJM-Ho&list=PLhCiuvlix-rSgQNLIl7Qg2KbQni3fz-ea&index=19
-      -   FALTA:    proyecto a parte: Eloquent ORM | Rimorsoft Online  https://www.youtube.com/watch?v=IaVmfb-f6TE&list=PLhCiuvlix-rT96yLQTTr3-eTZl6sbhVte&index=26
-      -   FALTA:    creo que proyecto a parte: CRUB dinamico con VUEJS de rimorsoft.
 
 //////////////////////////UPDATE - ACTUALIZAR - LARAVEL - 5.7 a 5.8 a 6.0////////////////////////////////////////////////////////////////////////////////
 DOCUMENTACION 5.7 a 5.8: https://styde.net/como-actualizar-de-laravel-5-7-a-5-8/
@@ -737,9 +747,10 @@ DOCUMENTACION: 5.8 a 6 https://styde.net/como-actualizar-tu-aplicacion-de-larave
 
 ////////////////////////MOSTRAR MENSAJES LOG EN LARAVEL - debug////////////////////////////////////////////////////////
 DOCUMENTACION: https://laravel.com/docs/5.7/logging#writing-log-messages
-use Illuminate\Support\Facades\Log;
-Log::info($message);
-ver en: storage/logs/ archivo actual a lo ultimo
+
+          use Illuminate\Support\Facades\Log;
+          Log::info($message);
+          ver en: storage/logs/    //archivo actual a lo ultimo
 
 
 ///////////////////////////EXTRAS///////////////////////////////////////////////////////////////////////
@@ -754,9 +765,17 @@ ver en: storage/logs/ archivo actual a lo ultimo
 - Servidores Conclusiones:
     no hay servidor gratuito para subir laravel y un buen broker MQTT. solo por tarjeta de credito y por 1año. (google,aws,azure, heroku  ...)
     opciones un cpu o rasperry. (android NO!). si es con maquina propia. hay que configurar la red y la pc.
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+ - Configuracion de USUARIOS:   https://laraveldaily.com/9-things-you-can-customize-in-laravel-registration/
+
+///////////////////////////  FALTA   -  CONTINUAR/////////////////////////////////////////////
+
+      -   ARREGLAR: Navbar, alinear tablas, correo (olvide contraseña, recordar datos de sesion?, contacto y usuarios, verificar email),
+                    - contactame:  si usuario registrado no solicitarle datos personales si invitado solicitarle datos.
+      -   FALTA:    proyecto a parte: Eloquent ORM | Rimorsoft Online  https://www.youtube.com/watch?v=IaVmfb-f6TE&list=PLhCiuvlix-rT96yLQTTr3-eTZl6sbhVte&index=26
+      -   FALTA:    creo que proyecto a parte: CRUB dinamico con VUEJS de rimorsoft.
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////////////////////
   *                                 ***********************                                            *
   *                                 *  F R O N T - E N D  *                                            *

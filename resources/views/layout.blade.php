@@ -1,13 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-<title>@yield('title','PorDefecto')</title>
-<!-- CSRF Token lo utiliza axiox -->
-<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- este CSRF Token lo utiliza axiox -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
+<title>@yield('title','Sistema Web')</title>
+
+<!-- Fonts -->
+<link rel="dns-prefetch" href="//fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+<!-- Styles -->
 <link rel="stylesheet" href="{{mix('/css/app.css')}}">
+<!-- Scripts -->
 <script src="{{mix('/js/app.js')}}" defer> </script>
 
 </head>

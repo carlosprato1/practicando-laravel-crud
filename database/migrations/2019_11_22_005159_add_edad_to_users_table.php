@@ -16,7 +16,7 @@ class AddEdadToUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
 
             $table->integer('edad');
-            $table->integer('role'); // Definir 1. Empleado  2. supervisor   3. administrador
+
         });
     }
 
@@ -29,7 +29,7 @@ class AddEdadToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('edad');
-            $table->dropColumn('role');
+      
         });
     }
 }

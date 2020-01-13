@@ -82,9 +82,11 @@ class rolController extends Controller
     public function edit($id)
     {
           $role = Role::findOrfail($id);
+          //esta variable solo se usa en la vista ayudar a marcar los checkbox de permisos en el rol
           $currenPermisos =  $role -> permissions;
           $permisos = Permission::get();
 
+      //condiciones para ayudar a marcar todos o ningun checkbox al cargar la pagina edit.
           if (strcmp($role->special, "all-access") == 0) {
             $currenPermisos = $permisos;
           }
@@ -108,10 +110,11 @@ class rolController extends Controller
     {
          $role->update(  $request->validated() );  // update role basic (name,slug, description)
 
-         if($request->get('customRadio') != null){
+     //condiciones para almacenar correctamente lo permisos.
+         if($request->get('customRadio') != null){//si radio existe, solo asigne radio y no se meta con la sincronizacion de permisos
              $role->special = $request->get('customRadio');
              $role->save();
-         }else{
+         }else{  // si radio es vacio, special es null y sincronice los permisos (si los hay)
                if($request->get('list-permisos') != null){
                    $role->syncPermissions($request->get('list-permisos'));
                }
