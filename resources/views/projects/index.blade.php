@@ -19,12 +19,11 @@
 
       <ul class="list-group">
       	@forelse($projects as $projectsItem)
-          <li class="list-group-item border-0 mb-3 shadow-sm">
+          <li class="list-group-item border-1 mb-3 shadow-sm rounded">
             <a class="text-secondary d-flex justify-content-between align-items-center"
                 href="{{route('projects.show',$projectsItem)}}">
-                <span >{{$projectsItem->title}}      </span>
-                <span class="font-weight-bold">{{$projectsItem->description}}</span>
-                <span class="text-black-50">{{$projectsItem->updated_at->format('h:i:s')}}</span>
+                <span class="font-weight-bold">{{$projectsItem->title}}      </span>
+                <span >{{$projectsItem->description}}</span>
             </a>
           </li>
 

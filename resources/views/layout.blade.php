@@ -19,9 +19,10 @@
 
 </head>
 <body>
+
 <!-- #app lo utiliza vuejs-->
   <div id='app' class="d-flex flex-column h-screen justify-content-between">
-
+<!-- El justify-content-between: me centra el main si no es tan grande  -->
       <header>
             @include('partials.nav')
             @include('partials.sesion-status')

@@ -8,10 +8,6 @@
 
     <div class="row">
 
-      <div class="col-12 col-lg-12 ">
-        @include('partials.Mensaje-Usuario')
-      </div>
-
       <div class="col-12 col-lg-6 ">
         <img class="img-fluid mb-4" src="\img\about.svg" alt="Quien Soy">
       </div>

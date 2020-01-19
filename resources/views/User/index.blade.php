@@ -16,11 +16,11 @@
 
       <ul class="list-group">
       	@forelse($users as $usersItem)
-          <li class="list-group-item border-0 mb-3 shadow-sm">
+          <li class="list-group-item border-1 mb-3 shadow-sm rounded">
             <a class="text-secondary d-flex justify-content-between align-items-center"
                 href="{{route('users.show',$usersItem)}}">
-                <span >{{$usersItem->name}}      </span>
-                <span class="font-weight-bold">{{$usersItem->email}}</span>
+                <span class="font-weight-bold">{{$usersItem->name}}  </span>
+                <span class="text-black-50">{{$usersItem->email}}</span>
                 <span class="text-black-50">{{$usersItem->updated_at->format('h:i:s')}}</span>
             </a>
           </li>

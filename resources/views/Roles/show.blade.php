@@ -7,10 +7,11 @@
   <div class="bg-white p-5 shadow rounded">
 
     <h1>{{$roles -> name}}</h1>
-    <p class="text-btn-secondary">Descripcion: {{ $roles-> description }}</p>
-    <p class="text-btn-secondary">url amigable - Slug: {{ $roles-> slug }}</p>
-    <p class="text-btn-secondary">Permiso Especial: {{ $roles-> special ?? 'Especifico' }}</p>
-    <p class="text-black-50">{{ $roles-> created_at -> diffForHumans() }}</p>
+    <p class="text-btn-secondary pl-3">Descripcion: {{ $roles-> description }}</p>
+    <p class="text-btn-secondary pl-3">url - Slug: {{ $roles-> slug }}</p>
+    <p class="text-btn-secondary pl-3">Permiso Especial: {{ $roles-> special ?? 'Especifico' }}</p>
+    <p class="text-black-50">Creado: {{ $roles-> created_at -> diffForHumans() }}</p>
+    <p class="text-black-50">Actualizado: {{ $roles-> updated_at -> diffForHumans() }}</p>
 
      <div class="d-flex justify-content-between align-items-center">
 

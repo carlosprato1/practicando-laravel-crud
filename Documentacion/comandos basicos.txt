@@ -769,8 +769,9 @@ DOCUMENTACION: https://laravel.com/docs/5.7/logging#writing-log-messages
 
 ///////////////////////////  FALTA   -  CONTINUAR/////////////////////////////////////////////
 
-      -   ARREGLAR: Navbar, alinear tablas, correo (olvide contraseña, recordar datos de sesion?, contacto y usuarios, verificar email),
-                    - contactame:  si usuario registrado no solicitarle datos personales si invitado solicitarle datos.
+      -   ARREGLAR: - Mostrar los roles->special En usuario - indexx y lista de permisos en role - show.
+                    - correo (olvide contraseña, recordar datos de sesion?, contacto y usuarios, verificar email),
+                    - contactame:  si usuario registrado no solicitarle datos
       -   FALTA:    proyecto a parte: Eloquent ORM | Rimorsoft Online  https://www.youtube.com/watch?v=IaVmfb-f6TE&list=PLhCiuvlix-rT96yLQTTr3-eTZl6sbhVte&index=26
       -   FALTA:    creo que proyecto a parte: CRUB dinamico con VUEJS de rimorsoft.
 

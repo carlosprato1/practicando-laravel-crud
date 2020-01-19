@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\saveUserRequest;
 use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Validation\Rule;
-      //  use Illuminate\Support\Facades\Log;
+      use Illuminate\Support\Facades\Log;
 //use Illuminate\Support\Facades\Gate;
 
 
@@ -74,7 +74,10 @@ class userController extends Controller
     public function show($id)
     {
       $users = User::findOrfail($id);     // no puedo usar el mismo nombre $users para variables callback como destroy o updata
-      return view('User.show',['user' => $users]);
+      $currenRoles = $users->roles;
+    //  Log::info($users->roles);
+
+      return view('User.show',['user' => $users],['currenRoles' => $currenRoles]);
 
     }
 

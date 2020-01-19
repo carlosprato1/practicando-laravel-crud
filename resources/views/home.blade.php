@@ -7,10 +7,6 @@
 <div class="container">
   <div class="row">
 
-    <div class="col-12 col-lg-12 ">
-      @include('partials.Mensaje-Usuario')
-    </div>
-
     <div class="col-12 col-lg-6">
             <h1 class="display-5 text-primary"
                 >Desarrollo Web </h1>
